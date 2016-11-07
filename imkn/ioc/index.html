@@ -89,7 +89,7 @@
 						<li class="fragment">Полное управление</li>
 						<li class="fragment">Ждём команды пользователя - пишем результат</li>
 					</ul>
-					<pre><code data-trim data-noescape>
+					<pre><code data-trim data-noescape class="language-java">
 public static void main(String args[]) {
   Scanner scanner = new Scanner(System.in);
   String str = "";
@@ -113,8 +113,8 @@ public static void main(String args[]) {
 						<li class="fragment">Что происходило до вызова метода?</li>
 						<li class="fragment">Теряем управление</li>
 					</ul>
-					<pre><code data-trim data-noescape>
-@RequestMapping(value = "/weatherdata/{id}", method = RequestMethod.GET)
+					<pre><code data-trim data-noescape class="language-java">
+@RequestMapping(value = "/weatherdata/{id}", method = GET)
 public WeatherData getOneWeather(@PathVariable("id") int id)
 {
     return new WeatherData(id, "-1", -2 * id);
@@ -145,7 +145,7 @@ public WeatherData getOneWeather(@PathVariable("id") int id)
 						<li class="fragment">Мы не управляем порядком вызовов</li>
 						<li class="fragment">Только встраиваем свой код</li>
 					</ul>
-					<pre><code data-trim data-noescape>
+					<pre><code data-trim data-noescape class="language-java">
 public abstract class TestCase extends Assert implements Test {
   ....
   protected void runTest() throws Throwable {
@@ -206,14 +206,14 @@ public abstract class TestCase extends Assert implements Test {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<p>Пример от Мартина Фаулера</p>
 				<a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a>
 			</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
-<pre><code data-trim data-noescape>
+					<h5>Внедрение зависимостей</h5>
+<pre><code data-trim data-noescape class="language-java">
 public class MovieLister {...
   public Collection<Movie> moviesDirectedBy(String director) {
     List<Movie> allMovies = <span style="color:yellow"><b>finder</b></span>.findAll();
@@ -227,11 +227,11 @@ public class MovieLister {...
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<ul>
 						<li>Определим интерфейс</li>
 					</ul>
-<pre class="fragment"><code data-trim data-noescape>
+<pre class="fragment"><code data-trim data-noescape class="language-java">
 public interface MovieFinder {
   List findAll();
 }
@@ -239,11 +239,11 @@ public interface MovieFinder {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<ul>
 						<li>Откуда мы возьмём конкретную реализацию?</li>
 					</ul>
-<pre class="fragment"><code data-trim data-noescape>
+<pre class="fragment"><code data-trim data-noescape class="language-java">
 public class MovieLister {
   private MovieFinder finder;
   public MovieLister() {
@@ -253,13 +253,13 @@ public class MovieLister {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<p>Схема зависимостей</p>
 					<img data-src="naive.gif">
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<p>В чём проблема?</p>
 					<ul>
 						<li class="fragment">Lister зависит и от интерфейса, и от реализации</li>
@@ -269,7 +269,7 @@ public class MovieLister {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<p>Решение</p>
 					<ul>
 						<li class="fragment">Assembler, управляющий зависимостями</li>
@@ -279,9 +279,9 @@ public class MovieLister {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<p>Spring: внедрение через поле</p>
-	<pre><code data-trim data-noescape>
+	<pre><code data-trim data-noescape class="language-java">
 @Named
 public class ColonDelimitedMovieFinder implements MovieFinder {
 }
@@ -295,9 +295,9 @@ public class MovieLister {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрнение зависимостей</h5>
+					<h5>Внедрение зависимостей</h5>
 					<p>Spring: внедрение через конструктор</p>
-	<pre><code data-trim data-noescape>
+	<pre><code data-trim data-noescape class="language-java">
 @Inject
 public class ColonDelimitedMovieFinder implements MovieFinder {
 }
@@ -362,7 +362,7 @@ public class MovieLister {
 				</section>
 				<section>
 					<h2>Как создать Bean</h2>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class CsvMovieFinder implements MovieFinder {
   private String fileName;
@@ -373,7 +373,7 @@ public class CsvMovieFinder implements MovieFinder {
 				<section>
 					<h2>Как создать Bean</h2>
 					<p>Может быть создан конфигурацией</p>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Configuration
 public class MovieFinderConfiguration {
 
@@ -387,7 +387,7 @@ public class MovieFinderConfiguration {
 				<section>
 					<h2>Как внедрить Bean</h2>
 					<p>Внедрение через поле</p>
-	<pre><code data-trim data-noescape>
+	<pre><code data-trim data-noescape class="language-java">
 @Named
 public class MovieLister {
   @Inject
@@ -398,7 +398,7 @@ public class MovieLister {
 				<section>
 					<h2>Как внедрить Bean</h2>
 					<p>Внедрение через конструктор</p>
-	<pre><code data-trim data-noescape>
+	<pre><code data-trim data-noescape class="language-java">
 @Named
 public class MovieLister {
 
@@ -414,7 +414,7 @@ public class MovieLister {
 				<section>
 					<h2>Как внедрить Bean</h2>
 					<p>Внедрение списка бинов</p>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class MovieLister {
   @Inject
@@ -424,7 +424,7 @@ public class MovieLister {
 				<section>
 					<h2>Как внедрить Bean</h2>
 					<p>Внедрение бина по имени</p>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Named("csvFinder")
 public class CsvMovieFinder implements MovieFinder {
   private String fileName;
@@ -440,7 +440,7 @@ public class MovieLister {
 				<section>
 					<h2>Как получить Bean</h2>
 					<p>Получение бина из фабрики</p>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class MovieLister {...
 
@@ -466,7 +466,7 @@ public class MovieLister {...
 				</section>
 				<section>
 					<h2>Область видимости</h2>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Configuration
 public class MovieFinderConfiguration {
 
@@ -497,7 +497,7 @@ public class MovieFinderConfiguration {
 				</section>
 				<section>
 					<h2>Жизненный цикл бина</h2>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class CachingMovieLister {
   @PreDestroy
@@ -517,13 +517,23 @@ public class CachingMovieLister {
 				</section>
 				<section>
 					<h2>Инъекция системных свойств</h2>
-<pre><code data-trim data-noescape>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class SomeBean {
   @Value("#{systemProperties.databaseName}")
   private String databaseName;
 }
 </code></pre>
+				</section>
+				<section>
+					<h2>Задание на практику</h2>
+					<ul>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
 				</section>
 			</div>
 		</div>
