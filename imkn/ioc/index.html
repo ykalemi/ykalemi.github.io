@@ -1,0 +1,553 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Inversion of Control</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal slide">
+			<div class="footer">
+							NAUMEN, Калеми Юрий
+			</div>
+			<div class="slides">
+				<section>
+					<h2>Inversion of Control</h2>
+					<h2>Инверсия управления</h2>
+					<p>На примере Spring</p>
+				</section>
+				<section>
+					<h2>Фреймворки и библиотеки</h2>
+					<ul>
+						<li class="fragment">Всё уже написано</li>
+						<li class="fragment">И протестировано (как тестами, так и другими программистами)</li>
+						<li class="fragment">Новые технологии (на которые у вас нет времени)</li>
+						<li class="fragment">Улучшения (на которые у вас нет времени)</li>
+						<li class="fragment">Простое вхождение в проект</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Фреймворки и библиотеки. Проблемы</h2>
+					<ul>
+						<li class="fragment">Отступления - могут быть дорогими / невозможными</li>
+						<li class="fragment">Развитие может уйти в ненужную для компании сторону</li>
+						<li class="fragment">Переход с версии на версию требует затрат</li>
+						<li class="fragment">Окончание поддержки и развития</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Библиотека</h2>
+					<ul>
+						<li class="fragment">Набор функций, которые можно вызвать</li>
+						<li class="fragment">Библиотека делает работу и возвращает результат</li>
+						<li class="fragment">Примеры: прочитать файл; сделать запись в лог</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Фреймворк</h2>
+					<ul>
+						<li class="fragment">Воплощает какой-то дизайн, архитектуру</li>
+						<li class="fragment">Поведение уже встроено в фреймворк</li>
+						<li class="fragment">Фреймворк - это каркас</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Чтобы использовать фреймворк</h2>
+					<ul>
+						<li class="fragment">Встроить своё поведение в различные места фреймворка</li>
+						<li class="fragment">Собственные классы, или реализации интерфейсов (наследники)</li>
+						<li class="fragment">Код фреймворка вызывает ваш код в конкретных точках</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Inversion of Control (Инверсия управления)</h2>
+					<ul>
+						<li class="fragment">Ключевая характеристика фреймворка</li>
+						<li class="fragment">Контроль остаётся в коде фреймворка</li>
+						<li class="fragment">Пользователь теряет контроль</li>
+					</ul>
+				</section>
+
+				<section><h3>Пример 1 - командная строка</h3>
+					<ul>
+						<li class="fragment">Полное управление</li>
+						<li class="fragment">Ждём команды пользователя - пишем результат</li>
+					</ul>
+					<pre><code data-trim data-noescape>
+public static void main(String args[]) {
+  Scanner scanner = new Scanner(System.in);
+  String str = "";
+  while (!str.equals("exit")) {
+    str = scanner.nextLine();
+    ...
+    if (activeModes.contains(SIMPLE_MODE)) {
+      System.out.println(str);
+    }
+    if (activeModes.contains(STORE_MODE)) {
+      strings.add(str);
+      System.out.println("Введено строк: " + strings.size());
+    }
+    ...
+					</code></pre>
+				</section>
+
+				<section><h3>Пример 2 - REST</h3>
+					<ul>
+						<li class="fragment">Мы просто возвращаем ответ</li>
+						<li class="fragment">Что происходило до вызова метода?</li>
+						<li class="fragment">Теряем управление</li>
+					</ul>
+					<pre><code data-trim data-noescape>
+@RequestMapping(value = "/weatherdata/{id}", method = RequestMethod.GET)
+public WeatherData getOneWeather(@PathVariable("id") int id)
+{
+    return new WeatherData(id, "-1", -2 * id);
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Inversion of Control (Инверсия управления)</h2>
+					<ul>
+						<li>Ключевая характеристика фреймворка</li>
+						<li>Контроль остаётся в коде фреймворка</li>
+						<li>Пользователь теряет контроль</li>
+						<li class="fragment">Это и есть Инверсия управления</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Как встроить свой код</h2>
+					<ul>
+						<li class="fragment">Фреймворк генерирует события, клиентский код - подписывается</li>
+						<li class="fragment">Интерфейс, который должен быть реализован клиентом</li>
+						<li class="fragment">Шаблонный метод (Template method) (см. JUnit)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>JUnit</h2>
+					<ul>
+						<li class="fragment">Мы не управляем порядком вызовов</li>
+						<li class="fragment">Только встраиваем свой код</li>
+					</ul>
+					<pre><code data-trim data-noescape>
+public abstract class TestCase extends Assert implements Test {
+  ....
+  protected void runTest() throws Throwable {
+  }
+  protected void setUp() throws Exception {
+  }
+  protected void tearDown() throws Exception {
+  }
+}
+					</code></pre>
+				</section>
+				<section>
+					<h2>Как встроить свой код</h2>
+					<ul>
+						<li>Фреймворк генерирует события, клиентский код - подписывается</li>
+						<li>Интерфейс, который должен быть реализован клиентом</li>
+						<li>Шаблонный метод (Template method) (см. JUnit)</li>
+						<li class="fragment">Шаблон “Фабрика” (Factory)</li>
+						<li class="fragment">Service locator (JNDI)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Интерфейсы vs. классы</h2>
+					<ul>
+						<li class="fragment">Интерфейс - это способ взаимодействия</li>
+						<li class="fragment">Класс реализует интерфейс</li>
+						<li class="fragment">Неявный интерфейс класса - что доступно извне</li>
+						<li class="fragment">Что необходимо и достаточно реализовать</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Почему IoC - это важно?</h2>
+					<img data-src="wtf.jpg">
+				</section>
+				<section>
+					<h2>Почему IoC - это важно?</h2>
+					<ul>
+						<li class="fragment">Я же не пишу фреймворки!</li>
+						<li class="fragment">Я пишу один, без команды!</li>
+						<li class="fragment">Моим кодом не пользуются другие программисты!</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Почему это важно?</h2>
+					<img data-src="comic.jpg">
+				</section>
+				<section>
+					<h2>Почему IoC - это важно?</h2>
+					<ul>
+						<li class="fragment">Инкапсуляция - основа хорошего дизайна</li>
+						<li class="fragment">Явный контракт легче соблюдать чем неявный</li>
+						<li class="fragment">Контракт не только для пользователя, но и для владельца</li>
+						<li class="fragment">Легче читать код</li>
+						<li class="fragment">Легче тестировать</li>
+						<li class="fragment">Легче рефакторить</li>
+						<li class="fragment">Вы через год - это другой человек</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<p>Пример от Мартина Фаулера</p>
+				<a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a>
+			</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+<pre><code data-trim data-noescape>
+public class MovieLister {...
+  public Collection<Movie> moviesDirectedBy(String director) {
+    List<Movie> allMovies = <span style="color:yellow"><b>finder</b></span>.findAll();
+    for(Iterator<Movie> it = allMovies.iterator(); it.hasNext();) {
+      Movie movie = it.next();
+      if(!movie.getDirector().equals(director)) it.remove();
+    }
+    return allMovies;
+  }
+</code></pre>
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<ul>
+						<li>Определим интерфейс</li>
+					</ul>
+<pre class="fragment"><code data-trim data-noescape>
+public interface MovieFinder {
+  List findAll();
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<ul>
+						<li>Откуда мы возьмём конкретную реализацию?</li>
+					</ul>
+<pre class="fragment"><code data-trim data-noescape>
+public class MovieLister {
+  private MovieFinder finder;
+  public MovieLister() {
+    finder = new ColonDelimitedMovieFinder("movies1.txt");
+  }
+</code></pre>
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<p>Схема зависимостей</p>
+					<img data-src="naive.gif">
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<p>В чём проблема?</p>
+					<ul>
+						<li class="fragment">Lister зависит и от интерфейса, и от реализации</li>
+						<li class="fragment">Если убрать зависимость - откуда брать реализацию?</li>
+						<li class="fragment">Как использовать разные реализации в разных условиях?</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<p>Решение</p>
+					<ul>
+						<li class="fragment">Assembler, управляющий зависимостями</li>
+						<li class="fragment">Предоставляет конкретную реализацию для интерфейса</li>
+					</ul>
+					<img class="fragment" data-src="injector.gif">
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<p>Spring: внедрение через поле</p>
+	<pre><code data-trim data-noescape>
+@Named
+public class ColonDelimitedMovieFinder implements MovieFinder {
+}
+
+@Named
+public class MovieLister {
+  @Inject
+  private MovieFinder finder;
+}
+	</code></pre>
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
+					<h5>Внедрнение зависимостей</h5>
+					<p>Spring: внедрение через конструктор</p>
+	<pre><code data-trim data-noescape>
+@Inject
+public class ColonDelimitedMovieFinder implements MovieFinder {
+}
+
+@Named
+public class MovieLister {
+
+  private MovieFinder finder;
+
+  @Inject
+  public MovieLister(MovieFinder fnd) {
+    this.finder = fnd;
+  }
+...
+	</code></pre>
+				</section>
+				<section>
+					<h2>Внедрение зависимостей в Spring</h2>
+				</section>
+				<section>
+					<h2>Spring</h2>
+					<h5>Все проеты</h5>
+					<img data-src="spring_io.png"/>
+				</section>
+				<section>
+					<h2>Spring framework</h2>
+					<ul>
+						<li><b>Dependency Injection</b></li>
+						<li>Aspect-Oriented Programming including Spring's declarative transaction management</li>
+						<li>Spring MVC web application and RESTful web service framework</li>
+						<li>Foundational support for JDBC, JPA, JMS</li>
+						<li>Much more…</li>
+					</ul>
+				</section>
+				<section>
+					<h2>DI в Spring</h2>
+					<ul>
+						<li class="fragment">IoC-контейнер - любая реализация DI, например Spring</li>
+						<li class="fragment">BeanFactory (Фабрика бинов)</li>
+						<li class="fragment">Bean (Бин)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Bean</h2>
+					<h5>Бин</h5>
+					<p>Это объект системы, который</p>
+					<ul>
+						<li>создан</li>
+						<li>собран</li>
+						<li>управляется</li>
+					</ul>
+					<p>IoC контейнером</p>
+				</section>
+				<section>
+					<h2>Как создать Bean</h2>
+					<p>Может быть помечен аннотацией</p>
+					<ul>
+						<li>@Named (JSR-330)</li>
+						<li>@Component (Spring)</li>
+						<li>@Service (Spring)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Как создать Bean</h2>
+<pre><code data-trim data-noescape>
+@Named
+public class CsvMovieFinder implements MovieFinder {
+  private String fileName;
+	...
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Как создать Bean</h2>
+					<p>Может быть создан конфигурацией</p>
+<pre><code data-trim data-noescape>
+@Configuration
+public class MovieFinderConfiguration {
+
+  @Bean
+  public CsvMovieFinder csvMovieFinder() {
+    return new CsvMovieFinder("movies.csv");
+  }
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Как внедрить Bean</h2>
+					<p>Внедрение через поле</p>
+	<pre><code data-trim data-noescape>
+@Named
+public class MovieLister {
+  @Inject
+  private MovieFinder finder;
+}
+	</code></pre>
+				</section>
+				<section>
+					<h2>Как внедрить Bean</h2>
+					<p>Внедрение через конструктор</p>
+	<pre><code data-trim data-noescape>
+@Named
+public class MovieLister {
+
+  private MovieFinder finder;
+
+  @Inject
+  public MovieLister(MovieFinder finder) {
+    this.finder = finder;
+  }
+...
+</code></pre>
+				</section>
+				<section>
+					<h2>Как внедрить Bean</h2>
+					<p>Внедрение списка бинов</p>
+<pre><code data-trim data-noescape>
+@Named
+public class MovieLister {
+  @Inject
+  private List&lt;MovieFinder&gt; finders;
+</code></pre>
+				</section>
+				<section>
+					<h2>Как внедрить Bean</h2>
+					<p>Внедрение бина по имени</p>
+<pre><code data-trim data-noescape>
+@Named("csvFinder")
+public class CsvMovieFinder implements MovieFinder {
+  private String fileName;
+  ...
+}
+
+@Named
+public class MovieLister {
+  @Inject @Named("csvFinder")
+  private MovieFinder finder;
+</code></pre>
+				</section>
+				<section>
+					<h2>Как получить Bean</h2>
+					<p>Получение бина из фабрики</p>
+<pre><code data-trim data-noescape>
+@Named
+public class MovieLister {...
+
+  @Inject
+  private BeanFactory factory;
+
+  public Collection<Movie> moviesDirectedBy(String director) {
+    MovieFinder finder = <span style="color:yellow"><b>factory.getBean('csvFinder');</b></span>
+    List<Movie> allMovies = finder.findAll();
+    for(Iterator<Movie> it = allMovies.iterator(); it.hasNext();) {
+    ...
+</code></pre>
+				</section>
+				<section>
+					<h2>Область видимости</h2>
+					<h5>(Scope)</h5>
+					<ul>
+						<li>Singleton - по умолчанию</li>
+						<li>Prototype - новый экземпляр каждый раз</li>
+						<li>Request - на один HTTP-запрос</li>
+						<li>Session - на одну HTTP-сессию</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Область видимости</h2>
+<pre><code data-trim data-noescape>
+@Configuration
+public class MovieFinderConfiguration {
+
+  @Bean
+  @Scope("prototype")
+  public CsvMovieFinder csvMovieFinder() {
+    return new CsvMovieFinder("movies.csv");
+  }
+}
+</code></pre>
+				<p class="fragment">Какой шаблон здесь реализован?</p>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+					<ul>
+						<li class="fragment">@PostConstruct</li>
+						<li class="fragment">@PreDestroy</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+					<p>@PostConstruct</p>
+					<ul>
+						<li class="fragment">Бин создан</li>
+						<li class="fragment">Собран (есть все зависимости)</li>
+						<li class="fragment">Вызов сразу после инъекции зависимостей</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+<pre><code data-trim data-noescape>
+@Named
+public class CachingMovieLister {
+  @PreDestroy
+  public void clearMovieCache() {
+    // clears the movie cache upon destruction...
+  }
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Инъекция (системных) свойств</h2>
+					<p>@Value</p>
+					<ul>
+						<li class="fragment">Свойства из property-файлов</li>
+						<li class="fragment">Системные свойства</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Инъекция системных свойств</h2>
+<pre><code data-trim data-noescape>
+@Named
+public class SomeBean {
+  @Value("#{systemProperties.databaseName}")
+  private String databaseName;
+}
+</code></pre>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				// Shows the slide number using default formatting
+				slideNumber: true,
+				controls: false,
+				center: true,
+				transition: 'slide',
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
