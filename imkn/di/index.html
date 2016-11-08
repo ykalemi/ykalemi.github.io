@@ -464,12 +464,12 @@ public @interface RestController {
 					<a href="https://github.com/ykalemi/ioc">https://github.com/ykalemi/ioc</a>
 					<ul>
 						<li class="fragment">Запустить приложение и проверить его работу</li>
-						<li class="fragment">Перевести проект на Spring (Хранилище)</li>
-						<li class="fragment">Если хранилище пустое, то добавить дефолтные значения</li>
-						<li class="fragment">Сделать сервис валидации с двумя валидаторами: один только пишет в лог, другой проверяет что дата не старше 2017 года</li>
-						<li class="fragment">Реализовать новое хранилище - в файле. Внедрять хранилище по имени бина</li>
-						<li class="fragment">Имя файла должно задаваться в application.properties</li>
-						<li class="fragment">Используемое хранилище должно задаваться при запуске приложения</li>
+						<li class="fragment">Вместо Singleton.getInstance() использовать внедрение зависимости. Выделить интерфейс для хранилища</li>
+						<li class="fragment">Создать StorageInitializer. Если хранилище при старте пустое - добавить дефолтные значения (убрать их из конструктора)</li>
+						<li class="fragment">Для добавления данных через REST сделать сервис валидации ValidationService с двумя валидаторами (Validator): один только пишет в System.out, другой проверяет что дата не старше 2017 года</li>
+						<li class="fragment">Реализовать новое хранилище - в файле (сохранение данных через сериализацию, ObjectOutputStream.writeObject). Внедрять хранилище по имени бина</li>
+						<li class="fragment">Имя файла для файлового хранилища должно задаваться в application.properties</li>
+						<li class="fragment">Используемое хранилище должно задаваться при запуске приложения через аргумент виртуальной машины (-DstorageType=fileStorage)</li>
 					</ul>
 				</section>
 			</div>
