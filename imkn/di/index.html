@@ -211,7 +211,24 @@ public class MovieFinderConfiguration {
   }
 }
 </code></pre>
-				<p>Например, если нужно выполнить дополнительные действия</p>
+				<p>Например, если нужно выполнить дополнительные действия, которые не хочется делать частью логики бина</p>
+				</section>
+				<section>
+					<h2>Как создать Bean</h2>
+					<p>Bean может быть даже строкой</p>
+<pre><code data-trim data-noescape class="language-java">
+@Configuration
+public class DatabaseConfiguration {
+
+  @Bean
+  public String databaseVendor() {
+    ...
+    String vendor = getVendor();
+    ...
+    return vendor;
+  }
+}
+</code></pre>
 				</section>
 				<section>
 					<h2>Как внедрить Bean</h2>
@@ -278,6 +295,14 @@ public class MovieLister {
 </code></pre>
 				<p>Если есть несколько реализаций одного интерфейса</p>
 				</section>
+				<section>
+					<h2>Имя Bean</h2>
+					<ul>
+						<li>Указано явно в аннотации @Named</li>
+						<li>Имя класса со строчной буквы, если создан через аннотацию</li>
+						<li>Имя метода со строчной буквы, если создан в конфигурации</li>
+					</ul>
+				</sectino>
 				<section>
 					<h2>Как получить Bean</h2>
 					<p>Получение бина из фабрики</p>
