@@ -205,7 +205,8 @@ public class MovieFinderConfiguration {
   @Bean
   public MovieFinder movieFinder() {
     ...
-    Collection&lt;Movie&gt; movies = moviesDao.getAllMoviesFromDataBase();
+    Collection&lt;Movie&gt; movies =
+        moviesDao.getAllMoviesFromDataBase();
     ...
     return new CollectionMovieFinder(movies);
   }
