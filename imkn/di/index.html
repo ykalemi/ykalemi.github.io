@@ -41,9 +41,9 @@
 					<h5>Внедрение зависимостей</h5>
 <pre><code data-trim data-noescape class="language-java">
 public class MovieLister {...
-  public Collection&gt;Movie&lt; moviesDirectedBy(String director) {
-    List&gt;Movie&lt; allMovies = <span style="color:yellow"><b>finder</b></span>.findAll();
-    for(Iterator&gt;Movie&lt; it = allMovies.iterator(); it.hasNext();) {
+  public Collection&lt;Movie&gt; moviesDirectedBy(String director) {
+    List&lt;Movie&gt; allMovies = <span style="color:yellow"><b>finder</b></span>.findAll();
+    for(Iterator&lt;Movie&gt; it = allMovies.iterator(); it.hasNext();) {
       Movie movie = it.next();
       if(!movie.getDirector().equals(director)) it.remove();
     }
@@ -65,16 +65,15 @@ public interface MovieFinder {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-<pre><code data-trim data-noescape class="language-java">
+					<p>Откуда мы возьмём конкретную реализацию?</p>
+<pre class="fragment"><code data-trim data-noescape class="language-java">
 public class MovieLister {
   private MovieFinder finder;
   public MovieLister() {
     finder = new ColonDelimitedMovieFinder("movies1.txt");
   }
 </code></pre>
-				<ul>
-					<li>Откуда мы возьмём конкретную реализацию?</li>
-				</ul>
+					<p class="fragment">На прошлой практике был вариант с Singleton</p>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
@@ -272,6 +271,12 @@ public class MovieLister {
 					<p>Внедрение списка бинов</p>
 <pre><code data-trim data-noescape class="language-java">
 @Named
+public class MartinScorsese implements Director {
+@Named
+public class JamesCameron implements Director {
+</code></pre>
+<pre><code data-trim data-noescape class="language-java">
+@Named
 public class DirectorsService {
   @Inject
   private List&lt;Director&gt; allDirectors;
@@ -284,9 +289,9 @@ public class DirectorsService {
 <pre><code data-trim data-noescape class="language-java">
 @Named("csvFinder")
 public class CsvMovieFinder implements MovieFinder {
-  private String fileName;
-  ...
-}
+
+@Named("oracleFinder")
+public class OracleMovieFinder implements MovieFinder {
 </code></pre>
 <pre><code data-trim data-noescape class="language-java">
 @Named
@@ -347,7 +352,7 @@ public class CachingMovieLister {
   @PostConstruct
   public void populateMovieCache() {
     // Загружаем данные из БД в кэш
-		cache.addAll(readFromDataBase());
+    cache.addAll(readFromDataBase());
   }
 }
 </code></pre>
@@ -457,6 +462,7 @@ public @interface RestController {
 				<section>
 					<h2>Задание на практику</h2>
 					<ul>
+						<li class="fragment">Запустить приложение и проверить</li>
 						<li class="fragment">Перевести проект на Spring (Хранилище)</li>
 						<li class="fragment">Если хранилище пустое, то добавить дефолтные значения</li>
 						<li class="fragment">Сделать сервис валидации с двумя валидаторами: один только пишет в лог, другой проверяет что дата не старше 2017 года</li>
