@@ -1,0 +1,425 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Exceptions</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal slide">
+			<div class="footer">NAUMEN, Калеми Юрий</div>
+			<div class="slides">
+				<section>
+					<h2>Обработка исключений</h2>
+					<p>Best practices</p>
+				</section>
+				<section>
+					<h2>Exception</h2>
+					<h5>Немного теории</h5>
+				</section>
+				<section>
+					<h2>Возбуждение исключения</h2>
+					<ul>
+						<li>Создаётся объект, представляющий исключение</li>
+						<li>Поток исполнения останавливается</li>
+						<li>Включается механизм обработки исключения</li>
+						<li>Находится обработчик исключения</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Стек вызова метода</h2>
+					<img src="exceptions-callstack.gif" width="600px">
+				</section>
+				<section>
+					<h2>Поиск обработчика</h2>
+					<img src="exceptions-errorOccurs.gif" width="600px">
+				</section>
+				<section>
+					<h2>Возбуждение исключения</h2>
+					<ul>
+						<li>throw используется для возбуждения исключения</li>
+						<li>Исключение - это объект java</li>
+						<li>Создаётся оператором new</li>
+						<li>Может иметь другие аргументы в конструкторе</li>
+					</ul>
+<pre><code data-trim data-noescape class="language-java">
+if (object == null) {
+	throw new NullPointerException("object is null");
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Перехват исключения</h2>
+					<p>Ключевое слово catch - обозначает обработчик исключений</p>
+<pre><code data-trim data-noescape class="language-java">
+try {
+	// Код, который может возбуждать исключение
+} catch (ExceptionType1 e1) {
+	// Обработка исключения ExceptionType1
+} catch (ExceptionType2 e2) {
+	// Обработка исключения ExceptionType2
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Обработчик исключения</h2>
+					<ul>
+						<li>catch - это как метод с одним аргументом</li>
+						<li>Ищется только первый обработчик исключений</li>
+						<li>После выполнения catch исключение - обработано</li>
+						<li>Поиск обработчиков прекращается</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Собственные исключения</h2>
+<pre><code data-trim data-noescape class="language-java">
+class MyException extends Exception {
+  private String someProperty;
+
+  public MyException() {}
+
+  public MyException(String msg) { super(msg); }
+
+  public MyException(String someProperty, String msg) {
+    super(msg);
+    this.someProperty = someProperty;
+  }
+
+  public String getSomeProperty {return someProperty;}
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Спецификации исключений</h2>
+					<h5>Exception specification</h5>
+					<ul>
+						<li>Сообщить об исключениях, возбуждаемых в методе</li>
+						<li>Часть сигнатуры метода</li>
+					</ul>
+<pre><code data-trim data-noescape class="language-java">
+public void checkNewClubMember() throws TooOld, TooFat, TooBlonde {
+  //...
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Возможные обработки</h2>
+					<h5>Повторное возбуждение</h5>
+					<ul>
+						<li>Обработка передаётся на уровень выше</li>
+						<li>Остальные обработчики текущего try - игнорируются</li>
+						<li>Стек в исключении не будет изменён</li>
+					</ul>
+<pre><code data-trim data-noescape class="language-java">
+try {
+  someMethod();
+} catch (Exception e) {
+  doSomeActions();
+  e.printStackTrace(System.out);
+  throw e;
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Возможные обработки</h2>
+					<h5>Цепочки исключений</h5>
+<pre><code data-trim data-noescape class="language-java">
+try {
+  someMethod();
+} catch (SomeException e) {
+  throw RuntimeException(e);
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Иерархия исключений</h2>
+					<img src="exceptionhierarchy.png" width="800px" style="border:0;"/>
+				</section>
+				<section>
+					<h2>Контролируемые исключения</h2>
+					<h5>Checked exceptions</h5>
+					<p>Exception и наследники</p>
+					<ul>
+						<li>Должны указываться в сигнатуре метода (throws)</li>
+						<li>Должны быть обработаны кодом, который вызывает данный метод</li>
+						<li>Некая ожидаемая ошибка</li>
+						<li>Чаще всего: при работе с внешними системами (сеть, файл)</li>
+						<li>Чаще всего: попробовать ещё раз, пропустить, изменить вводные данные</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Неконтролируемые исключения</h2>
+					<h5>Unchecked exceptions</h5>
+					<p>RuntimeException и наследники</p>
+					<ul>
+						<li>Можно не указывать в сигнатуре метода</li>
+						<li>Чаще всего являются ошибками в программе</li>
+						<li>Пример: NullPointerException</li>
+						<li>Чаще всего: нельзя исправить; прекратить выполнение программы</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Error</h2>
+					<ul>
+						<li>Серьёзные проблемы окружения</li>
+						<li>Ошибки JVM</li>
+						<li>Чаще всего: нельзя перехватывать</li>
+						<li>OutOfMemoryError, ThreadDeath, StackOverflowError</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Блок finally</h2>
+<pre><code data-trim data-noescape class="language-java">
+try {
+  someMethod(); // Защищённая секция
+} catch (SomeException1 e1) {
+  // Обработчик исключения 1
+} catch (SomeException2 e2) {
+  // Обработчик исключения 2
+} finally {
+  // действия, производимые в любом случае
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Блок finally</h2>
+					<ul>
+						<li>Выполняется вне зависимости от наличия исключений</li>
+						<li>Необходимо что-то вернуть в исходное состояние</li>
+						<li>Закрыть открытый файл</li>
+						<li>Закрыть соединение к БД</li>
+						<li>Откатить или завершить транзакцию</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Блок finally и AutoCloseable</h2>
+<pre><code data-trim data-noescape class="language-java">
+BufferedReader br = new BufferedReader(new FileReader(path));
+try {
+  return br.readLine();
+} finally {
+  if (br != null) br.close();
+}
+</code></pre>
+<p>vs.</p>
+<pre><code data-trim data-noescape class="language-java">
+try (BufferedReader br =
+  new BufferedReader(new FileReader(path))) {
+    return br.readLine();
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Задание 1 (10-15 минут)</h2>
+					<ul>
+						<li>Пользователь вводит имена однокурсников</li>
+						<li>Имена нужно проверить: только из латинских букв; с заглавной буквы; не длиннее 15 символов</li>
+						<li>Проверка должна выбрасывать исключение ValidationException</li>
+						<li>Но работа программы не должна завершаться</li>
+						<li>На каждую проблему пользователю должно быть отдельное сообщение</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Исключительная ситуация</h2>
+					<p>Исключительная ситуация - проблема, из-за которой нормальное
+							продолжение работы метода, выполняющегося в данный момент,
+							становится невозможным.
+					</p>
+				</section>
+				<section>
+					<h2>Исключительная ситуация</h2>
+					<ul>
+						<li>Проблема</li>
+						<li>Нет информации для решения проблемы</li>
+						<li>Код не может выполняться</li>
+						<li>Решение - покинуть текущий контекст</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Валидация - это исключительная ситуация?</h2>
+				</section>
+				<section>
+					<h2>Валидация - это исключительная ситуация?</h2>
+					<h5>Нет:</h5>
+					<ul>
+						<li>Ожидаемо, что пользователь может ввести некорректные данные</li>
+						<li>Валидация - это часть логики</li>
+						<li>Логика валидатора - вернуть результат валидации</li>
+						<li>Код, вызывающий валидатор, может и возбудить исключение</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Не использовать исключения в логике</h5>
+					<ul>
+						<li>Они слишком похожи на GOTO</li>
+						<li>Их не видно в исходном коде</li>
+						<li>Они создают слишком много точек выхода</li>
+						<li>Создание исключения - дорогая операция*</li>
+					</ul>
+					<p>*плохой, но действующий аргумент</p>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Checked</h5>
+					<ul>
+						<li>Если инициатор способен обработать ошибку</li>
+						<li>Продожить выполнение программы</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Unchecked</h5>
+					<ul>
+						<li>Для индикации програмной ошибки</li>
+						<li>Восстановление невозможно</li>
+						<li>Дальнейшее выполнение принесёт больше вреда чем пользы</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>А когда создавать наследника Throwable?</h5>
+					<p>Никогда</p>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Как обрабатывать checked исключения?</h5>
+					<ul>
+						<li>Логировать и игнорировать (если бизнес-логика позволяет)</li>
+						<li>Преобразовать к unchecked</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Как обрабатывать checked исключения?</h5>
+					<p>Не стоит пробрасывать unchecked исключение выше</p>
+					<p>Код, загружающий пользователя из БД, должен выбрасывать NoSuchUserException,
+					а не SQLException - так как последний ни о чём не говорит</p>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Никогда не проглатывайте исключения</h5>
+<pre><code data-trim data-noescape class="language-java">
+catch (SomeException e)
+  e.printStackTrace(System.out);
+}
+</code></pre>
+<pre><code data-trim data-noescape class="language-java">
+catch (SomeException e)
+  // do nothing
+}
+</code></pre>
+<pre><code data-trim data-noescape class="language-java">
+catch (SomeException e)
+  throw new AnotherException(e.getMessage());
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Не возбуждайте исключения в finally</h5>
+<pre><code data-trim data-noescape class="language-java">
+try {
+  doSomeMethod();
+} finally {
+  cleanup();
+}
+</code></pre>
+				<p>Из-за исключения, возбужденного в cleanup, будет потеряно исходное исключение</p>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Добавляйте значимую информацию</h5>
+<pre><code data-trim data-noescape class="language-java">
+public Customer loadCustomer (int id) {
+  try {
+    //... load the Customer
+  } catch (SQLException e) {
+    throw new AppSQLException("error loading customer: id="+id, e);
+  }
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Никогда не обрабатывайте Throwable</h5>
+<pre><code data-trim data-noescape class="language-java">
+} catch (Throwable t) {
+   LOGGER.error("method has failed", t);
+}
+</code></pre>
+				<ul>
+					<li>Error - наледник Throwable</li>
+					<li>Error - серьёзные ошибки</li>
+					<li>Чаще всего они не могут быть обработаны JVM</li>
+				</ul>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Логируйте ИЛИ пробрасывайте</h5>
+<pre><code data-trim data-noescape class="language-java">
+catch (NoSuchMethodException e) {
+  LOGGER.error("Some information", e);
+  throw e;
+}
+</code></pre>
+				<ul>
+					<li>Исключение будет залогировано на уровне выше</li>
+					<li>Но лог будет запутан для анализа</li>
+				</ul>
+				</section>
+				<section>
+					<h2>Правило</h2>
+					<h5>Используете стандартные исключения</h5>
+					<ul>
+						<li>IllegalArgumentException</li>
+						<li>IllegalStateException</li>
+						<li>NullPointerException</li>
+						<li>IndexOutOfBoundsException</li>
+						<li>UnsupportedOperationException</li>
+						<li>ConcurrentModificationException</li>
+						<li>...</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				// Shows the slide number using default formatting
+				slideNumber: true,
+				controls: false,
+				center: true,
+				transition: 'slide',
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
