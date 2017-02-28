@@ -434,10 +434,19 @@ catch (SomeException e)
 					<h2>Логирование</h2>
 					<h5>Что не так с System.out (System.err)?</h5>
 					<ul>
+						<li>Может не быть прав</li>
 						<li>Сообщения выводятся на серверную консоль</li>
 						<li>Их может быть не видно</li>
 						<li>Они не сохранятся</li>
 					</ul>
+				</section>
+				<section>
+					<h2>Логирование</h2>
+					<h5>Что не так с System.out (System.err)?</h5>
+<pre><code data-trim data-noescape class="language-java">
+System.err.close();
+System.err.println("On closed stream nothing is printable");
+</code></pre>
 				</section>
 				<section>
 					<h2>Логирование</h2>
@@ -461,10 +470,27 @@ public class HelloWorld {
 					<h5>В чём преимущества систем логирования</h5>
 					<ul>
 						<li>Сообщения сохраняются в файл, на консоль, Syslog, TCP сокеты...</li>
-						<li>Уровни логирования - debug(), info(), warn() и error()</li>
+						<li>Уровни логирования - trace(), debug(), info(), warn() и error()</li>
 						<li>Возможность управлять каждым экземпляром Logger</li>
 						<li>Или сразу иерархией - по имени пакета</li>
 					</ul>
+				</section>
+				<section>
+					<h2>Логирование</h2>
+					<h5>Уровни логирования</h5>
+<pre><code data-trim data-noescape class="language-java">
+logger.trace("Full current car state: {}", car);
+logger.warn("Low fuel level.");
+logger.debug("Starting search for nearest gas station.");
+logger.info("Located nearest gas station.");
+logger.debug("Exiting gas station search");
+logger.trace("Full current car state: {}", car);
+</code></pre>
+				</section>
+				<section>
+					<h2>Логирование</h2>
+					<h5>Уровни логирования</h5>
+					<img src="loglevels.png" width="800px" style="border:0;"/>
 				</section>
 				<section>
 					<h2>Логирование</h2>
