@@ -1,0 +1,678 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Exceptions</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal slide">
+			<div class="footer">NAUMEN, Калеми Юрий</div>
+			<div class="slides">
+				<section>
+					<h2>Project Management System</h2>
+					<p>Обзор архитектуры приложения</p>
+				</section>
+				<section>
+					<h2>PMS с точки зрения бизнеса</h2>
+					<ul>
+						<li>Администрирование и конфигурация КЦ</li>
+						<li>Управление проектами КЦ</li>
+						<li>Рабочее место оператора</li>
+						<li>Историческая отчетность</li>
+						<li>Управление списком пользователей</li>
+					</ul>
+				</section>
+				<section>
+					<h2>PMS с точки зрения бизнеса</h2>
+					<h5>Управление проектами КЦ:</h5>
+					<ul>
+						<li>Новые проекты/кампании</li>
+						<li>Сценарии работы операторов</li>
+						<li>Стратегии обзвона</li>
+						<li>Настройка отчетной подсистемы</li>
+						<li>Оперативное управление проектами</li>
+						<li>Импорт данных для обзвона</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Влияние требований на архитектуру</h2>
+					<ul>
+						<li>WEB-доступ</li>
+						<li>Широкая интеграция с шиной NCC</li>
+						<li>Импорт большого количества данных</li>
+						<li>Рабочее место операторов (до 1000)</li>
+						<li>Заполнение и сохранение анкет</li>
+						<li>Историческая и онлайн отчётность</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Нагрузка со стороны внедрения</h2>
+					<ul>
+						<li>Анкеты</li>
+						<li>Отчёты</li>
+						<li>REST</li>
+					</ul>
+				</section>
+				<section>
+					<h2>PMS</h2>
+					<ul>
+						<li>Web-приложение на java, монолит*</li>
+						<li>Tomcat</li>
+						<li>Oracle/Postgres (через Hibernate)</li>
+						<li>Интерфейс “конфигуратора” - GUIC</li>
+						<li>Отдельный интерфейс анкет (более Rich: больше JS, AJAX)</li>
+						<li>Клиент шины NCC</li>
+						<li>Spring в качестве DI</li>
+						<li>Jcache (Infinispan) + Jgroups - для реализации кластера</li>
+						<li>Jersey для REST</li>
+						<li>Slf4j  + logback</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Naumen Kernel</h2>
+					<h5>Платформа для быстрого создания систем автоматизации предприятий</h5>
+					<ul>
+						<li>OSGi (модули и сервисы)</li>
+						<li>Главная цель - быстро получить новый продукт</li>
+						<li>Новый продукт - это просто новый модуль</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Naumen Kernel</h2>
+					<img src="kernel.png" width="1028px" style="border:0;">
+				</section>
+				<section>
+					<h2>Naumen Kernel</h2>
+					<h5>Унаследованные особенности</h5>
+					<ul>
+						<li>Модульность</li>
+						<li>Иерархия бизнес-объектов</li>
+						<li>Структура БД</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Naumen Kernel</h2>
+					<h5>Используем до сих пор</h5>
+					<ul>
+						<li>GUIC</li>
+						<li>Фоновые задачи</li>
+						<li>Планировщик</li>
+						<li>Фоновые задачи</li>
+						<li>LDAP</li>
+						<li>Миграции</li>
+						<li>Система прав</li>
+						<li>Пользовательские атрибуты*</li>
+						<li>Отчёты*</li>
+					</ul>
+				</section>
+				<section>
+					<img src="new_gui.png" width="1028px" style="border:0;">
+				</section>
+				<section>
+					<h2>Отчёты</h2>
+					<ul>
+						<li>Одна из главных бизнес-задач</li>
+						<li>Повысились требования</li>
+						<li>Данные не только из PMS</li>
+						<li>Сложные связи</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Отчёты</h2>
+					<h5>Цепочка изменений</h5>
+					<ul>
+						<li>От Kernel - механизм настройки</li>
+						<li>Настройка упрощена - только SQL</li>
+						<li>Остались OLAP-скрипты</li>
+						<li>Избавились от таблиц конфигурации отчётов</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Отчёты</h2>
+					<h5>Изоляция от рабочей БД</h5>
+					<ul>
+						<li>Отчётная БД - на другом сервере</li>
+						<li>Данные в подготовленном для отчётов виде</li>
+						<li>Никаких нормальных форм</li>
+						<li>Отчётные таблицы описаны в документации</li>
+						<li>Копирование данных в отчётную БД - независимый процесс</li>
+					</ul>
+				</section>
+				<section>
+					<h2>MV</h2>
+					<h5>Сервис заполнения отчётной БД</h5>
+					<ul>
+						<li>Очередь событий - в БД PMS</li>
+						<li>Читает из очереди события</li>
+						<li>Раскладывает по отчётным таблицам</li>
+						<li>Миграции MV - flyway</li>
+						<li>Возможна инициализация из рабочей БД</li>
+					</ul>
+				</section>
+				<section>
+					<h2>flyway миграция</h2>
+<pre><code data-trim data-noescape class="language-xml" style="max-height: 600px">
+&lt;changeSet
+    author="amelnikov"
+    context="update"
+    id="add_natural_client_fb_identifier"&gt;
+    &lt;preConditions
+        onFail="MARK_RAN"
+        onFailMessage="MV_NATURAL_CLIENT.facebookId already exists"&gt;
+        &lt;not&gt;
+            &lt;columnExists
+                columnName="facebookId"
+                tableName="MV_NATURAL_CLIENT"/&gt;
+        &lt;/not&gt;
+    &lt;/preConditions&gt;
+    &lt;addColumn tableName="MV_NATURAL_CLIENT"&gt;
+        &lt;column
+            name="facebookId"
+            type="${type.string}"/&gt;
+    &lt;/addColumn&gt;
+&lt;/changeSet&gt;
+</code></pre>
+				</section>
+				<section>
+					<h2>Обработка события</h2>
+<pre><code data-trim data-noescape class="language-xml" style="max-height: 600px">
+&lt;handler
+  handlerName="ru.naumen.callcases.cases.CallCase"
+  name="MV_CALL_CASE"&gt;
+  &lt;table name="MV_CALL_CASE"
+    tableName="MV_CALL_CASE"
+    updateType="all"&gt;
+  &lt;property column="UUID" name="UUID"/&gt;
+  &lt;property column="priority" name="priority"/&gt;
+  &lt;property column="projectUUID" name="projectUUID"/&gt;
+  &lt;property column="projectTitle" name="projectTitle"/&gt;
+</code></pre>
+				</section>
+				<section>
+					<h2>События для отчётов</h2>
+					<ul>
+						<li>Hibernate Interceptor</li>
+						<li>onSave/onDelete/onFlushDirty/
+						onCollectionUpdate/onCollectionRecreate</li>
+						<li>Тип объекта нужно экспортировать?</li>
+						<li>beforeTransactionCompletion</li>
+						<li>Cоздаём событие (набор property: value)</li>
+						<li>Cериализуем (FST)</li>
+						<li>Cохраняем в очередь в БД</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Минимальная конфигурация</h2>
+					<ul>
+						<li>PMS</li>
+						<li>MV</li>
+					</ul>
+					<p>* уже не совсем монолит</p>
+				</section>
+				<section>
+					<h2>Построение отчётов</h2>
+					<ul>
+						<li>Старая болезнь: OOM</li>
+						<li>Решение - построение в отдельном сервисе</li>
+						<li>Падение этого сервиса никак не влияет на работу</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Slave</h2>
+					<ul>
+						<li>“Урезанный” PMS, который строит отчёт</li>
+						<li>Связь PMS-Slave через Akka</li>
+						<li>Получает задание, выполняет, возвращает xml</li>
+						<li>Задания: Построение, отрисовка, выгрузка</li>
+						<li>Если Slave не вынесен, то всё - внутри PMS</li>
+						<li>Но общение всё равно через Akka</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Анкеты</h2>
+					<ul>
+						<li>Анкеты - основной поток данных</li>
+						<li>Состоят из форм и атрибутов</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Пользовательские атрибуты</h2>
+					<ul>
+						<li>В Kernel: одна таблица на все атрибуты</li>
+						<li>PMS: атрибуты хранятся в JSON(PG)/XML(Oracle)</li>
+						<li>Возможен SQL к атрибутам внутри JSON/XML</li>
+						<li>PMS: все атрибуты объекта - одна ячейка</li>
+						<li>Большой плюс для MV</li>
+					</ul>
+					<p><a href="https://www.youtube.com/watch?v=wj2-khVWpfU">Доклад Андрея Аркаева на DUPM</a></p>
+				</section>
+				<section>
+					<h2>Анкеты</h2>
+					<ul>
+						<li>Широкая настройка внешнего вида</li>
+						<li>Интеграция с внешними системами</li>
+						<li>Отправка писем/смс</li>
+						<li>Чаты и социальные сети</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Анкеты</h2>
+					<ul>
+						<li>При настройке нужно понимать конечный вид</li>
+						<li>Настройка с помощью drag-n-drop</li>
+						<li>При работе внутри софтфона общается с JS-API</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Много Javascript</h2>
+					<ul>
+						<li>Ajax</li>
+						<li>Websocket</li>
+						<li>Для старого кода - Prototype</li>
+						<li>Для нового - jQuery</li>
+						<li>Есть тесты на JS</li>
+					</ul>
+				</section>
+				<section>
+					<h2>ЖЦ Анкеты</h2>
+					<ul>
+						<li>Маршрут по формам анкеты</li>
+						<li>Маршрутов может быть много</li>
+						<li>Сохранение в БД только в конце</li>
+						<li>Действие: завершить, отложить, перенаправить</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Анкеты на сервере</h2>
+					<ul>
+						<li>Сессия каждой текущей анкеты</li>
+						<li>Построение GUI в момент открытия</li>
+						<li>Компоненты подписываются на события анкеты</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Webphone</h2>
+					<img src="webphone2.png" width="757px" style="border:0;">
+				</section>
+				<section>
+					<h2>Webphone</h2>
+					<img src="webphone1.png" width="760px" style="border:0;">
+				</section>
+				<section>
+					<h2>Webphone</h2>
+					<ul>
+						<li>React.js</li>
+						<li>sipML5 клиент на базе WebRTC</li>
+						<li>WebSocket</li>
+						<li>PMS открывается в iframe вебфона</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Горячее резервирование</h2>
+					<ul>
+						<li>Работа оператора - главный процесс КЦ</li>
+						<li>Бесперебойность заполнения анкет</li>
+						<li>Трансфер оператора на другую ноду</li>
+						<li>Без потери заполненных данных</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Кластерный кэш</h2>
+					<ul>
+						<li>Есть сессии анкеты - это кэш</li>
+						<li>Нужна кластеризация кэша</li>
+						<li>Решение - infinispan+jgroups (thnx SD)</li>
+						<li>jCache</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Проблемы</h2>
+					<ul>
+						<li>Количество нужных кэшей</li>
+						<li>Их способность к сериализации</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Агентское приложение</h2>
+					<ul>
+						<li>Нужно только резервирование анкет</li>
+						<li>Тот же самый PMS, но с другим профилем</li>
+						<li>Ограничение функциональности</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Максимальная конфигурация</h2>
+					<ul>
+						<li>PMS</li>
+						<li>MV</li>
+						<li>Slave</li>
+						<li>1..N Агентских приложений</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Шина NCC</h2>
+					<ul>
+						<li>PMS - часть коллцентра</li>
+						<li>Интеграция со многими сервисами</li>
+						<li>Есть связь через БД (триггеры)</li>
+						<li>Есть связь через шину NCC</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Шина NCC</h2>
+<pre><code data-trim data-noescape class="language-xml" style="max-height: 600px">
+NPISocket - Sending text: 
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;NCC iface_v="2"&gt;
+&lt;Request id="00000000000lnak9k2nc2c81tc" name="GetSessionMessages"&gt;
+&lt;Params session_id="32"/&gt;
+&lt;/Request&gt;
+&lt;/NCC&gt;
+</code></pre>
+				</section>
+				<section>
+					<h2>Шина NCC</h2>
+<pre><code data-trim data-noescape class="language-xml" style="max-height: 600px">
+NPISocket - Server Response:
+&lt;NCC from="naumb-17.node.domain" to="naucrm-57.node.domain"&gt;
+&lt;Response name="GetSessionMessages" id="00000000000lnak9k2nc2c81tc"&gt;
+    &lt;LE&gt;
+      &lt;Params content_type="text/plain" created="1493214797" 
+      direction="in" done="0" from_addr="ykalemi@gmail.com/BCDA3F5F" 
+      message_date="" message_id="mb_msg_1493185959_1" 
+      remote_name="Yura Kalemi" reply_id="" series="37" 
+      session_id="32" spam="0" subject=""  to_addr="ykalemi@jabber.ru"/&gt;
+      &lt;Content charset="utf-8"&gt;&lt;![CDATA[1]]&gt;&lt;/Content&gt;
+      &lt;Files/&gt;
+      &lt;ME name="message-params"/&gt;
+    &lt;/LE&gt;
+&lt;/Response>&lt;/NCC&gt;
+</code></pre>
+				</section>
+				<section>
+					<h2>Примеры сообщений</h2>
+					<ul>
+						<li>Аутентификация PMS на шине</li>
+						<li>Проверка лицензии при логине</li>
+						<li>Оператор добавлен в проект</li>
+						<li>Запущен новый обзвон</li>
+						<li>В обзвон добавляются задания</li>
+						<li>Отправить сообщение в чате/почте/соц.сети</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Системные сообщения</h2>
+					<ul>
+						<li>На старте системы</li>
+						<li>Их приоритет выше</li>
+						<li>Аутентификация на шине</li>
+						<li>Получения пароля файлового сервиса</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Разные блокировки</h2>
+					<ul>
+						<li>Логин: пользовательский поток ждёт ответа</li>
+						<li>Старт обзвона: блокировать другие операции обзвона</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Клиент шины</h2>
+					<ul>
+						<li>Критичная для бизнеса функциональность</li>
+						<li>Широкое использование внутри PMS</li>
+						<li>Есть команды с большим объёмом данных</li>
+						<li>Есть длительные команды</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Переход на Spring</h2>
+					<h5>Минимальные изменения</h5>
+					<ul>
+						<li>Сервисы из OSGi -> компоненты Spring</li>
+						<li>Управление транзакциями</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Переход на Spring</h2>
+					<img src="spi1.png" width="757px" style="border:0;">
+				</section>
+				<section>
+					<h2>Переход на Spring</h2>
+					<img src="spi2.png" width="757px" style="border:0;">
+				</section>
+				<section>
+					<h2>Переход на Spring</h2>
+					<img src="spi3.png" width="757px" style="border:0;">
+				</section>
+				<section>
+					<h2>Security</h2>
+					<ul>
+						<li>SoftPhone - HTTP-аутентификация</li>
+						<li>Браузер - форма логина/kerberos</li>
+						<li>Rest, RPC - Basic auth</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Security</h2>
+					<ul>
+						<li>Правила размазаны по сервлетам</li>
+						<li>Дублирование</li>
+						<li>Конфликты</li>
+					</ul>
+				</section>
+				<section>
+					<img src="spring.png" width="952px" style="border:0;">
+				</section>
+				<section>
+					<h2>Текущие задачи</h2>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>Предпосылки</h5>
+					<ul>
+						<li>Короткие релизы (3-4 месяца)</li>
+						<li>Меньше версий для поддержки</li>
+						<li>Чаще обновления</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>Требования</h5>
+					<ul>
+						<li>Десятки/сотни клиентов</li>
+						<li>3-4 обновления каждого клиента в год</li>
+						<li>Время простоя 30 мин</li>
+						<li>Возможность отката</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>Проблемы</h5>
+					<ul>
+						<li>Клиенты боятся обновлений</li>
+						<li>Много трудозатрат</li>
+						<li>Мы тоже боимся обновлений</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>Риски</h5>
+					<ul>
+						<li>Миграция БД</li>
+						<li>Поддержка кастома</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>Задача</h5>
+					<ul>
+						<li>Быстрая</li>
+						<li>Безопасная</li>
+						<li>Возможность откатить (быстро)</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>1. Оставить как есть</h5>
+					<ul>
+						<li>30 минут - достаточно времени</li>
+						<li>Тестировать миграции на БД клиента</li>
+						<li>В случае проблем - локальные решения</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>1. Оставить как есть</h5>
+					<ul>
+						<li>Риски остаются</li>
+						<li>Трудозатраты остаются</li>
+						<li>Откат не быстрый</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>2. Не менять данные</h5>
+					<ul>
+						<li>Нужно изменение - новая колонка</li>
+						<li>Версия (N+1) пишет и читает в форматах N и (N+1)</li>
+						<li>Быстрый старт</li>
+						<li>Миграции безопасны</li>
+						<li>Быстрый откат</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>2. Не менять данные</h5>
+					<ul>
+						<li>Тяжело проводить большие изменения</li>
+						<li>Не все изменения БД без пауз</li>
+						<li>Требуются большие изменения в коде</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>3. Логическая репликация</h5>
+					<ul>
+						<li>Второе приложение параллельно</li>
+						<li>Докачка изменений</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Миграции</h2>
+					<h5>3. Логическая репликация</h5>
+					<ul>
+						<li>Сложное администрирование</li>
+						<li>Зависимость от технологий БД</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Модульность внутри монолита</h2>
+					<ul>
+						<li>Чёткие границы в коде</li>
+						<li>Внутренне API между функц.блоками</li>
+						<li>Скрытие кода</li>
+					</ul>
+					<p>Back to OSGi!</p>
+				</section>
+				<section>
+					<h2>Миграции - API</h2>
+					<ul>
+						<li>JS на анкетах</li>
+						<li>Изменение объектов на анкетах</li>
+						<li>Groovy скрипты в планировщике</li>
+						<li>REST</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Версионирование REST</h2>
+				</section>
+				<section>
+					<h2>Версионирование REST</h2>
+					<p>Череpз URI</p>
+<pre><code data-trim data-noescape class="language-java">
+http://host/v1/users
+http://host/v1/privileges
+</code></pre>
+				</section>
+				<section>
+					<h2>Версионирование REST</h2>
+					<p>Череpз Media Type</p>
+<pre><code data-trim data-noescape class="language-java">
+===>
+GET /users/3 HTTP/1.1
+Accept: application/vnd.myname.v1+json
+<===
+HTTP/1.1 200 OK
+Content-Type: application/vnd.myname.v1+json
+{
+    "user": {
+        "name": "John Smith"
+    }
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Клиент шины</h2>
+					<ul>
+						<li>Клиент может полностью заблокироваться</li>
+						<li>Другие сервисы могут работать со сбоями</li>
+						<li>Блокировка определяется в самой команде</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Клиент шины - Reactive</h2>
+					<ul>
+						<li>RxJava</li>
+						<li>Reactive Netty</li>
+						<li>Reactive Spring</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Выпилить Akka!</h2>
+				</section>
+				<section>
+					<h2>Спасибо</h2>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				history: true,
+				// Shows the slide number using default formatting
+				slideNumber: true,
+				controls: false,
+				center: true,
+				transition: 'slide',
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
