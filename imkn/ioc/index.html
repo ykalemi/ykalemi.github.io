@@ -215,9 +215,9 @@ public abstract class TestCase extends Assert implements Test {
 					<h5>Внедрение зависимостей</h5>
 <pre><code data-trim data-noescape class="language-java">
 public class MovieLister {...
-  public Collection<Movie> moviesDirectedBy(String director) {
-    List<Movie> allMovies = <span style="color:yellow"><b>finder</b></span>.findAll();
-    for(Iterator<Movie> it = allMovies.iterator(); it.hasNext();) {
+  public Collection&lt;Movie&gt; moviesDirectedBy(String director) {
+    List&lt;Movie&gt; allMovies = <span style="color:yellow"><b>finder</b></span>.findAll();
+    for(Iterator&lt;Movie&gt; it = allMovies.iterator(); it.hasNext();) {
       Movie movie = it.next();
       if(!movie.getDirector().equals(director)) it.remove();
     }
@@ -231,18 +231,15 @@ public class MovieLister {...
 					<ul>
 						<li>Определим интерфейс</li>
 					</ul>
-<pre class="fragment"><code data-trim data-noescape class="language-java">
+<pre><code data-trim data-noescape class="language-java">
 public interface MovieFinder {
-  List findAll();
+  List&lt;Movie&gt; findAll();
 }
 </code></pre>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрение зависимостей</h5>
-					<ul>
-						<li>Откуда мы возьмём конкретную реализацию?</li>
-					</ul>
+					<p>Откуда мы возьмём конкретную реализацию?</p>
 <pre class="fragment"><code data-trim data-noescape class="language-java">
 public class MovieLister {
   private MovieFinder finder;
@@ -253,39 +250,36 @@ public class MovieLister {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрение зависимостей</h5>
 					<p>Схема зависимостей</p>
-					<img data-src="naive.gif">
+					<img data-src="dep1.svg" width="100%"  style="border:0"/>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрение зависимостей</h5>
 					<p>В чём проблема?</p>
 					<ul>
-						<li class="fragment">Lister зависит и от интерфейса, и от реализации</li>
-						<li class="fragment">Если убрать зависимость - откуда брать реализацию?</li>
-						<li class="fragment">Как использовать разные реализации в разных условиях?</li>
+						<li>Lister зависит и от интерфейса, и от реализации Finder-а</li>
+						<li>Если убрать зависимость - откуда брать реализацию?</li>
+						<li>Как использовать разные реализации в разных условиях?</li>
 					</ul>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрение зависимостей</h5>
 					<p>Решение</p>
 					<ul>
-						<li class="fragment">Assembler, управляющий зависимостями</li>
-						<li class="fragment">Предоставляет конкретную реализацию для интерфейса</li>
+						<li>Assembler, управляющий зависимостями</li>
+						<li>Предоставляет конкретную реализацию для интерфейса</li>
 					</ul>
-					<img class="fragment" data-src="injector.gif">
+					<img data-src="dep2.svg" width="100%" style="border:0"/>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрение зависимостей</h5>
 					<p>Spring: внедрение через поле</p>
 	<pre><code data-trim data-noescape class="language-java">
 @Named
 public class ColonDelimitedMovieFinder implements MovieFinder {
 }
-
+</code></pre>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class MovieLister {
   @Inject
@@ -295,13 +289,32 @@ public class MovieLister {
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
-					<h5>Внедрение зависимостей</h5>
+					<p>Было/Стало</p>
+<pre><code data-trim data-noescape class="language-java">
+public class MovieLister {
+  private MovieFinder finder;
+
+  public MovieLister() {
+    finder = new ColonDelimitedMovieFinder("movies1.txt");
+  }
+</code></pre>
+<pre><code data-trim data-noescape class="language-java">
+@Named
+public class MovieLister {
+  @Inject
+  private MovieFinder finder;
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Dependency Injection</h2>
 					<p>Spring: внедрение через конструктор</p>
-	<pre><code data-trim data-noescape class="language-java">
+<pre><code data-trim data-noescape class="language-java">
 @Inject
 public class ColonDelimitedMovieFinder implements MovieFinder {
 }
-
+</code></pre>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class MovieLister {
 
@@ -315,12 +328,17 @@ public class MovieLister {
 	</code></pre>
 				</section>
 				<section>
-					<h2>Внедрение зависимостей в Spring</h2>
+					<h2>Dependency Injection</h2>
+					<p>Spring: внедрение через конструктор</p>
+					<p>Удобно для тестирования</p>
 				</section>
 				<section>
 					<h2>Spring</h2>
 					<h5>Все проекты</h5>
 					<img data-src="spring_io.png"/>
+				</section>
+				<section>
+					<h2>Внедрение зависимостей в Spring</h2>
 				</section>
 				<section>
 					<h2>Spring framework</h2>
@@ -333,11 +351,11 @@ public class MovieLister {
 					</ul>
 				</section>
 				<section>
-					<h2>DI в Spring</h2>
+					<h2>Внедрение зависимостей в Spring</h2>
 					<ul>
 						<li class="fragment">IoC-контейнер - любая реализация DI, например Spring</li>
-						<li class="fragment">BeanFactory (Фабрика бинов)</li>
-						<li class="fragment">Bean (Бин)</li>
+						<li class="fragment">BeanFactory (Фабрика бинов) - Ассемблер, сборщик</li>
+						<li class="fragment">Bean (Бин) - объект системы, содержащий логику</li>
 					</ul>
 				</section>
 				<section>
@@ -346,10 +364,8 @@ public class MovieLister {
 					<p>Это объект системы, который</p>
 					<ul>
 						<li>создан</li>
-						<li>собран</li>
-						<li>управляется</li>
+						<li>управляется Spring-ом</li>
 					</ul>
-					<p>IoC контейнером</p>
 				</section>
 				<section>
 					<h2>Как создать Bean</h2>
@@ -378,8 +394,30 @@ public class CsvMovieFinder implements MovieFinder {
 public class MovieFinderConfiguration {
 
   @Bean
-  public CsvMovieFinder csvMovieFinder() {
-    return new CsvMovieFinder("movies.csv");
+  public MovieFinder movieFinder() {
+    ...
+    Collection&lt;Movie&gt; movies =
+        moviesDao.getAllMoviesFromDataBase();
+    ...
+    return new CollectionMovieFinder(movies);
+  }
+}
+</code></pre>
+				<p>Например, если нужно выполнить дополнительные действия, которые не хочется делать частью логики бина</p>
+				</section>
+				<section>
+					<h2>Как создать Bean</h2>
+					<p>Bean может быть даже строкой</p>
+<pre><code data-trim data-noescape class="language-java">
+@Configuration
+public class DatabaseConfiguration {
+
+  @Bean
+  public String databaseVendor() {
+    ...
+    String vendor = getVendor();
+    ...
+    return vendor;
   }
 }
 </code></pre>
@@ -412,14 +450,30 @@ public class MovieLister {
 </code></pre>
 				</section>
 				<section>
+					<h2>Внедрение Bean</h2>
+					<ul>
+						<li>Если внедряется один бин, то он должен определяться однозначно</li>
+						<li>Или не должно быть других бинов с таким интерфейсом</li>
+						<li>Или внедрение должно быть по имени</li>
+						<li>Или должны быть заданы приоритеты</li>
+					</ul>
+				</section>
+				<section>
 					<h2>Как внедрить Bean</h2>
 					<p>Внедрение списка бинов</p>
 <pre><code data-trim data-noescape class="language-java">
 @Named
-public class MovieLister {
-  @Inject
-  private List&lt;MovieFinder&gt; finders;
+public class MartinScorsese implements Director {
+@Named
+public class JamesCameron implements Director {
 </code></pre>
+<pre><code data-trim data-noescape class="language-java">
+@Named
+public class DirectorsService {
+  @Inject
+  private List&lt;Director&gt; allDirectors;
+</code></pre>
+				<p>Если есть несколько реализаций одного интерфейса</p>
 				</section>
 				<section>
 					<h2>Как внедрить Bean</h2>
@@ -427,15 +481,25 @@ public class MovieLister {
 <pre><code data-trim data-noescape class="language-java">
 @Named("csvFinder")
 public class CsvMovieFinder implements MovieFinder {
-  private String fileName;
-  ...
-}
 
+@Named("oracleFinder")
+public class OracleMovieFinder implements MovieFinder {
+</code></pre>
+<pre><code data-trim data-noescape class="language-java">
 @Named
 public class MovieLister {
   @Inject @Named("csvFinder")
   private MovieFinder finder;
 </code></pre>
+				<p>Если есть несколько реализаций одного интерфейса</p>
+				</section>
+				<section>
+					<h2>Имя Bean</h2>
+					<ul>
+						<li>Указано явно в аннотации @Named</li>
+						<li>Имя класса со строчной буквы, если создан через аннотацию</li>
+						<li>Имя метода со строчной буквы, если создан в конфигурации</li>
+					</ul>
 				</section>
 				<section>
 					<h2>Как получить Bean</h2>
@@ -447,11 +511,62 @@ public class MovieLister {...
   @Inject
   private BeanFactory factory;
 
+  private String beanName;
+
   public Collection<Movie> moviesDirectedBy(String director) {
-    MovieFinder finder = <span style="color:yellow"><b>factory.getBean('csvFinder');</b></span>
+    MovieFinder finder = <span style="color:yellow"><b>factory.getBean(beanName);</b></span>
     List<Movie> allMovies = finder.findAll();
-    for(Iterator<Movie> it = allMovies.iterator(); it.hasNext();) {
-    ...
+</code></pre>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+					<ul>
+						<li>@PostConstruct</li>
+						<li>@PreDestroy</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+					<p>@PostConstruct</p>
+					<ul>
+						<li>Бин создан</li>
+						<li>Собран (есть все зависимости)</li>
+						<li>Вызов сразу после инъекции зависимостей</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+					<p>@PostConstruct</p>
+<pre><code data-trim data-noescape class="language-java">
+@Named
+public class CachingMovieLister {
+
+  @PostConstruct
+  public void populateMovieCache() {
+    // Загружаем данные из БД в кэш
+    cache.addAll(readFromDataBase());
+  }
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+					<p>@PreDestroy</p>
+					<p>Бин удаляется из фабрики</p>
+				</section>
+				<section>
+					<h2>Жизненный цикл бина</h2>
+					<p>@PreDestroy</p>
+<pre><code data-trim data-noescape class="language-java">
+@Named
+public class CachingMovieLister {
+
+  @PreDestroy
+  public void clearMovieCache() {
+    // Освобождаем кэш
+    cache.clear();
+  }
+}
 </code></pre>
 				</section>
 				<section>
@@ -459,7 +574,7 @@ public class MovieLister {...
 					<h5>(Scope)</h5>
 					<ul>
 						<li>Singleton - по умолчанию</li>
-						<li>Prototype - новый экземпляр каждый раз</li>
+						<li>Prototype - новый экземпляр при каждом вызове</li>
 						<li>Request - на один HTTP-запрос</li>
 						<li>Session - на одну HTTP-сессию</li>
 					</ul>
@@ -477,22 +592,21 @@ public class MovieFinderConfiguration {
   }
 }
 </code></pre>
-				<p class="fragment">Какой шаблон здесь реализован?</p>
 				</section>
 				<section>
 					<h2>Жизненный цикл бина</h2>
 					<ul>
-						<li class="fragment">@PostConstruct</li>
-						<li class="fragment">@PreDestroy</li>
+						<li>@PostConstruct</li>
+						<li>@PreDestroy</li>
 					</ul>
 				</section>
 				<section>
 					<h2>Жизненный цикл бина</h2>
 					<p>@PostConstruct</p>
 					<ul>
-						<li class="fragment">Бин создан</li>
-						<li class="fragment">Собран (есть все зависимости)</li>
-						<li class="fragment">Вызов сразу после инъекции зависимостей</li>
+						<li>Бин создан</li>
+						<li>Собран (есть все зависимости)</li>
+						<li>Вызов сразу после инъекции зависимостей</li>
 					</ul>
 				</section>
 				<section>
@@ -508,33 +622,49 @@ public class CachingMovieLister {
 </code></pre>
 				</section>
 				<section>
-					<h2>Инъекция (системных) свойств</h2>
-					<p>@Value</p>
-					<ul>
-						<li class="fragment">Свойства из property-файлов</li>
-						<li class="fragment">Системные свойства</li>
-					</ul>
-				</section>
-				<section>
-					<h2>Инъекция системных свойств</h2>
+					<h2>Внедрение системных свойств</h2>
 <pre><code data-trim data-noescape class="language-java">
 @Named
 public class SomeBean {
-  @Value("#{systemProperties.databaseName}")
+  @Value("#{systemProperties['databaseName']}")
   private String databaseName;
 }
 </code></pre>
+				<p>Системное свойство можно задать через аргумент VM</p>
+				<p>-DdatabaseName=Oracle</p>
 				</section>
 				<section>
-					<h2>Задание на практику</h2>
-					<ul>
-						<li class="fragment">Перевести проект на Spring (Хранилище)</li>
-						<li class="fragment">Если хранилище пустое, то добавить дефолтные значения</li>
-						<li class="fragment">Сделать сервис валидации с двумя валидаторами: один только пишет в лог, другой проверяет что дата не старше 2017 года</li>
-						<li class="fragment">Реализовать новое хранилище - в файле. Внедрять хранилище по имени бина</li>
-						<li class="fragment">Имя файла должно задаваться в application.properties</li>
-						<li class="fragment">Используемое хранилище должно задаваться при запуске приложения</li>
-					</ul>
+					<h2>Внедрение конфигурации</h2>
+<pre><code data-trim data-noescape class="language-java">
+@Named
+public class SomeBean {
+  @Value("${databaseName}")
+  private String databaseName;
+}
+</code></pre>
+				<p>Конфигурация задаётся в property файлах</p>
+				<p>Внимание! $ вместо #</p>
+				</section>
+				<section>
+					<h2>Аннотации в Spring могут "наследоваться"</h2>
+<pre><code data-trim data-noescape class="language-java">
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component
+public @interface Controller {
+</code></pre>
+				<p>Controller - это тоже Component, т.е. Bean</p>
+				</section>
+				<section>
+					<h2>Аннотации могут наследоваться</h2>
+<pre><code data-trim data-noescape class="language-java">
+@Documented
+@Controller
+@ResponseBody
+public @interface RestController {
+</code></pre>
+				<p>RestController - это тоже Controller, т.е. Component...</p>
 				</section>
 			</div>
 		</div>
