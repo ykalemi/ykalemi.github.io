@@ -52,7 +52,7 @@
 					</ul>
 				</section>
 				<section>
-					<img data-src="comic.jpg">
+					<img data-src="img/comic.jpg">
 				</section>
 				<section>
 					<ul>
@@ -195,7 +195,8 @@ public abstract class TestCase extends Assert implements Test {
 				<section>
 					<h2>Service locator</h2>
 <pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
-MovieFinder finder = (MovieFinder) ServiceLocator.getService("MovieFinder");
+MovieFinder finder = (MovieFinder) 
+		ServiceLocator.getService("MovieFinder");
 </code></pre>
 				</section>
 				<section>
@@ -245,7 +246,7 @@ public class MovieLister {
 				</section>
 				<section>
 					<p>Схема зависимостей</p>
-					<img data-src="dep1.svg" width="100%"  style="border:0"/>
+					<img data-src="img/dep1.svg" width="100%"  style="border:0"/>
 				</section>
 				<section>
 					<p>В чём проблема?</p>
@@ -262,7 +263,7 @@ public class MovieLister {
 						<li>Assembler, управляющий зависимостями</li>
 						<li>Предоставляет конкретную реализацию для интерфейса</li>
 					</ul>
-					<img data-src="dep2.svg" width="100%" style="border:0"/>
+					<img data-src="img/dep2.svg" width="100%" style="border:0"/>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
@@ -332,7 +333,7 @@ public class MovieLister {
 				<section>
 					<h2>Spring</h2>
 					<h5>Все проекты</h5>
-					<img data-src="spring_io.png"/>
+					<img data-src="img/spring_io.png"/>
 				</section>
 				<section>
 					<h2>Spring framework</h2>
@@ -658,7 +659,7 @@ public @interface RestController {
 				</section>
 				<section>
 					<h2>Dispatcher Servlet</h2>
-					<img data-src="dispatcherservlet.png">
+					<img data-src="img/dispatcherservlet.png">
 				</section>
 				<section>
 					<h2>Контроллер</h2>
