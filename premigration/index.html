@@ -31,15 +31,167 @@
 					<h2>Мигрируй вчера</h2>
 					<p>Миграции данных в продуктовой разработке</p>
 				</section>
+				<section>
+					<h2>Naumen Contact Center</h2>
+					<ul>
+						<li>Сервисная архитектура (~20 сервисов)</li>
+						<li>Несколько сервисов работают с БД</li>
+						<li>PostgreSql / Oracle</li>
+						<li>Разные сервисы - разные БД (теоретически)</li>
+					</ul>
+					<aside class="notes">
+						Как выглядит наш продукт?
+						Contact Center - сервисная архитектура
+						Поддерживаются PostgreSql и Oracle
+						Разные сервисы могут хранить данные в разных БД
+					</aside>
+				</section>
+				<section>
+					<h2>PMS</h2>
+					<ul>
+						<li>Система управления проектами (PMS)</li>
+						<li>Монолитное веб-приложение, Java</li>
+						<li>Механизм миграций - Naumen Kernel</li>
+					</ul>
+				</section>
+				<section>
+					<h2>NCC - это продукт</h2>
+					<ul>
+						<li>Мажорные релизы - раз в год/полгода</li>
+						<li>Минорные - каждые две недели</li>
+						<li>NCC установлен на инфраструктуре клиентов</li>
+						<li>Иногда нет доступа</li>
+						<li>Мы мигрируем данные</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Как выглядят обновления сейчас</h2>
+					<ul>
+						<li>Остановить приложение v1</li>
+						<li>Сделать бэкап данных и настроек*</li>
+						<li>Установить новую версию v2</li>
+						<li>Запустить новую версию v2</li>
+						<li>На старте приложения выполняется миграция</li>
+						<li>Миграция закончилась - приложение запустилось</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Что может пойти не так</h2>
+					<ul>
+						<li>Сломался один из скриптов миграции</li>
+						<li>Инженер не знает как преодолеть ошибку</li>
+						<li>Миграция данных выполняется слишком долго</li>
+						<li>Не ясен прогресс миграции</li>
+						<li>Успешная миграция - не гарантия успешного старта</li>
+						<li>Нет бекапа - нет отката</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Обновления</h2>
+					<h3>Инженеры их боятся</h3>
+				</section>
+				<section>
+					<h2>Проблемы бизнеса</h2>
+					<h3>Долгие релизы</h3>
+					<ul>
+						<li>Долгая доставка</li>
+						<li>Нет обратной связи</li>
+						<li>Нет повторных продаж</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Проблемы бизнеса</h2>
+					<h3>Высокие трудозатраты обновлений</h3>
+				</section>
+				<section>
+					<h2>Проблемы бизнеса</h2>
+					<h3>Риски для клиентов</h3>
+					<ul>
+						<li>Невозможно обновить самостоятельно</li>
+						<li>Неработающие интеграции</li>
+						<li>Долгие миграции</li>
+						<li>Большой простой</li>
+						<li>Потеря данных</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Обновления</h2>
+					<h3>Их боятся все</h3>
+				</section>
+				<section>
+					<h2>Требования бизнеса</h2>
+					<ul>
+						<li>Короткие релизы</li>
+						<li>Универсальная процедура обновления</li>
+						<li>Минимальный простой</li>
+						<li>Понимание прогресса обновления</li>
+						<li>Сократить трудозатраты</li>
+						<li>Возможность быстрого отката/li>
+						<li>Всё это реализовать - за реальные сроки</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Формулировка проблемы</h2>
+					<ul>
+						<li>Короткие релизы -></li>
+						<li>Релизов в год больше -></li>
+						<li>Столько версий невозможно поддерживать -></li>
+						<li>Клиентов надо обновлять часто -></li>
+						<li>3-4 обновления в год для клиента -></li>
+						<li>300-400 обновлений для нас</li>
+					</ul>
+					<aside class="notes">
+						Мы (вендор) хотим осуществить переход к более коротким релизам. Значит, релизов
+						 будет больше, а так как поддерживать большое количество версий невозможно,
+						 то хочется говорить: «дефект исправлен в следующей версии». Т.е. минорное
+						 обновление будет не 12.3.52 → 12.3.54, а 12.3 → 12.4. Таких обновлений для одного
+						 клиента может быть 3-4 в год. Если клиентов около 100, то количество обновлений,
+						 которые мы должны произвести в год - равно количеству дней.
+						Кратко: мы хотим обновлять всех клиентов часто (=много обновлений), но клиенты и инженеры обновлений боятся
+					</aside>
+				</section>
+				<section>
+					<h2>Формулировка проблемы</h2>
+					<ul>
+						<li>Хотим обновлять часто</li>
+						<li>Но все обновлений боятся</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Задача</h2>
+					<h3>Обновления не должны пугать</h3>
+					<ul>
+						<li>Понятный прогресс обновления</li>
+						<li>Не должно быть боязни потери данных: не меняем данные</li>
+						<li>Запуск новой версии приложения - максимально быстро</li>
+						<li>Возможность отката</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Мировой опыт</h2>
+					<aside class="notes">Какие вообще есть мировые практики доставки новых версий продукта с минимальным простоем?
+						В основном, все, конечно, решают только амбициозную задачу - обновление с нулевым простоем
+						(ну, или только про такие задачи рассказывают в статьях и на конференциях).
+						Давайте посмотрим на решение, и чему мы можем из него научиться.
+					</aside>
+				</section>
+				<section>
+					<h2>Blue Green Deployment</h2>
+					TODO схемы
+					<aside class="notes">Самый простой и самый распространенный способ доставки нового релиза без прерывания обсуживания.
+Есть два идентичных production-окружения. Синее и зелёное.
+В каждый момент времени только одно из них активно. Например, синее.
+При выпуске нового релиза на зеленом окружении собирается и тестируется новая версия приложения.
+Как только все тесты прошли, маршрутизатор переключается на зеленое окружение, и все запросы теперь идут к нему.
+
+Очень простая возможность отката изменений: если что-то пошло не так, то переключаем маршрутизатор обратно на синее окружение.
+После успешного обновления синее окружение очищается и становится площадкой для следующего релиза.
+Таким образом дополнительно при каждом обновлении тестируется горячее резервирование.
+					</aside>
+				</section>
 
 
 
-
-
-
-
-
-				
 				<section>
 					<h2>Интерфейсы vs. классы</h2>
 				</section>
@@ -203,7 +355,7 @@ public abstract class TestCase extends Assert implements Test {
 				<section>
 					<h2>Service locator</h2>
 <pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
-MovieFinder finder = (MovieFinder) 
+MovieFinder finder = (MovieFinder)
 		ServiceLocator.getService("MovieFinder");
 </code></pre>
 				</section>
@@ -216,11 +368,11 @@ MovieFinder finder = (MovieFinder)
 				<section>
 <pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
 public class MovieLister {...
-  
+
   public Collection&lt;Movie&gt; moviesDirectedBy(String director) {
-    
+
     List allMovies = <span style="font-style: bold"><b>finder</b></span>.findAll();
-    
+
     for(Iterator it = allMovies.iterator(); it.hasNext();) {
       Movie movie = it.next();
       if(!movie.getDirector().equals(director)) it.remove();
@@ -244,7 +396,7 @@ public interface MovieFinder {
 					<p>Откуда мы возьмём конкретную реализацию?</p>
 <pre   style="box-shadow:none"><code data-trim data-noescape class="language-java">
 public class MovieLister {
-  
+
   private MovieFinder finder;
 
   public MovieLister() {
@@ -439,7 +591,7 @@ public class DatabaseConfiguration {
 	<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
 @Component
 public class MovieLister {
-  
+
   @Autowired
   private MovieFinder finder;
 }
@@ -674,7 +826,7 @@ public @interface RestController {
 <pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
 @Controller
 public class HistoryController {
-    
+
     @RequestMapping(path = "/history/{client}")
     public ModelAndView indexLast864(
 			@PathVariable("client") String client,
