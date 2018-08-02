@@ -260,6 +260,114 @@
 					</ul>
 				</section>
 				<section>
+					<h2>Что у нас есть</h2>
+					<ul>
+						<li>Лекции</li>
+						<li>Практика</li>
+						<li>Опыт</li>
+						<li>Технологии</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Технологии</h2>
+					<ul>
+						<li>GitHub</li>
+						<li>GitHub Pages</li>
+						<li>OpenShift</li>
+						<li>Telegram/VK</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Сайт</h2>
+					<div class="paragraph">
+						<span class="image">
+							<img src="img/site.png" width="700"/>
+						</span>
+					</div>
+				</section>
+				<section>
+					<h2>Задачи</h2>
+					<div class="paragraph">
+						<span class="image">
+							<img src="img/issues.png" width="800"/>
+						</span>
+					</div>
+				</section>
+				<section>
+					<h2>Опыт</h2>
+					<ul>
+						<li>обкатали процесс
+						<ul>
+							<li>подбор контента</li>
+							<li>подготовки контента</li>
+						</ul>
+						</li>
+						<li>знаем что надо студентам</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Лекции</h2>
+					<ul>
+						<li>10 презентаций</li>
+						<li>не менее 3 в загажнике</li>
+						<li>желание улучшить</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Практика</h2>
+					<ul>
+						<li>один репозиторий</li>
+						<li>10 интересных, но неравнозначных заданий</li>
+						<li>проверка в GitHub</li>
+						<li>отладка в OpenShift</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Чего мы хотим?</h2>
+					<ul>
+						<li>славы</li>
+						<li>денег</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Лекции</h2>
+					<ul>
+						<li>конспект лекций</li>
+						<li>16 готовых</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Практика</h2>
+					<ul>
+						<li>пересмотреть задачи</li>
+						<li>добавить еще</li>
+						<li>подумать над бонусной</li>
+						<li>практика для 200 студентов</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Чего же мы хотим еще?</h2>
+					<ul>
+						<li>добровольцы</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Олимпиада</h2>
+					<ul>
+ 						<li>JavaRush</li>
+						<li>DevelCamp 2013</li>
+						<li>много интересных заданий</li>
+						<li>крутой приз</li>
+						<li>всё это надо сделать</li>
+					</ul>
+				</section>
+				<section id = "stat">
+					<h2>Статистика</h2>
+					<div class="paragraph">
+						<canvas id="canvas"></canvas>
+					</div>
+				</section>
+				<section>
 					<h2>Конец</h2>
 				</section>
 			</div>
@@ -267,6 +375,7 @@
 
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.js"></script>
+		<script src="http://www.chartjs.org/dist/2.7.2/Chart.bundle.js"></script>
 
 		<script>
 			// More info https://github.com/hakimel/reveal.js#configuration
@@ -286,5 +395,64 @@
 				]
 			});
 		</script>
+	<script>
+Reveal.addEventListener( 'slidechanged', function( event ) {
+	if (event.currentSlide.id != 'stat') return;
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {	
+					tooltips: {
+						mode: 'index',
+						intersect: false
+					},
+					responsive: true,
+					scales: {
+						xAxes: [{
+							stacked: true,
+						}],
+						yAxes: [{
+							stacked: true
+						}]
+					}
+				}
+			});
+} );
+		window.chartColors = {
+			red: 'rgb(255, 99, 132)',
+			orange: 'rgb(255, 159, 64)',
+			yellow: 'rgb(255, 205, 86)',
+			green: 'rgb(75, 192, 192)',
+			blue: 'rgb(54, 162, 235)',
+			purple: 'rgb(153, 102, 255)',
+			grey: 'rgb(201, 203, 207)'
+		};
+		var barChartData = {
+			labels: ['2018', '2017', '2016', '2015', '2014', '2013', '2012'],
+			datasets: [{
+				label: 'отклики',
+				backgroundColor: window.chartColors.grey,
+				data: [48, 282, 325, 44, 162, 49, 125]
+			}, {
+				label: 'тестовые задания',
+				backgroundColor: window.chartColors.blue,
+				data: [7, 55, 117, 15, 0, 0, 22]
+			}, {
+				label: 'собеседований',
+				backgroundColor: window.chartColors.green,
+				data: [8, 28, 53, 14, 0, 0, 0]
+			}, {
+				label: 'вышли на стажировку',
+				backgroundColor: window.chartColors.orange,
+				data: [12, 9, 11, 4, 7, 9, 7]
+			}, {
+				label: 'осталось работать',
+				backgroundColor: window.chartColors.red,
+				data: [7, 9, 6, 1, 6, 4, 5]
+			}]
+
+		};
+	</script>
 	</body>
 </html>
