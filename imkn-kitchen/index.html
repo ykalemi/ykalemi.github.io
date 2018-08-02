@@ -432,7 +432,7 @@
             if (event.currentSlide.id.indexOf('stat') == -1) return;
             var suffix =  event.currentSlide.id.split("_")[1]
 
-			if (window["chart_" + suffix]) return;
+			//if (window["chart_" + suffix]) return;
 
 
 		    var options = {
@@ -441,14 +441,6 @@
                     intersect: false
                 },
                 responsive: true,
-                legend: {
-                    labels: {
-                        filter: function(){
-                            console.log(arguments)
-							return true
-                        }
-					}
-                },
                 scales: {
                     xAxes: [{
                         stacked: true,
@@ -458,15 +450,9 @@
                     }]
                 }
             }
-			var data = barChartData;
-
-
+			var data = datasetEkb;
 			if (suffix == "all") {
-			    data.datasets = data.datasets.map(obj => {
-			        obj.stack = "_ekb";
-			        obj.backgroundColor = Chart.helpers.color(obj.backgroundColor).alpha(0.5).rgbString();
-			        return obj
-			    }).concat(notEkb.map(obj => {obj.stack = "_oth"; return obj}))
+			    data = datasetAll
 			}
 			var canvas = document.getElementById('canvas_' + suffix);
 			var ctx = canvas.getContext('2d');
@@ -485,52 +471,70 @@
 			purple: 'rgb(153, 102, 255)',
 			grey: 'rgb(201, 203, 207)'
 		};
-		var barChartData = {
-			labels: ['2018', '2017', '2016', '2015', '2014', '2013', '2012'],
-			datasets: [{
-				label: 'отклики',
-				backgroundColor: window.chartColors.grey,
-				data: [48, 282, 325, 44, 162, 49, 125]
-			}, {
-				label: 'тестовые задания',
-				backgroundColor: window.chartColors.blue,
-				data: [7, 55, 117, 15, 0, 0, 22]
-			}, {
-				label: 'собеседований',
-				backgroundColor: window.chartColors.green,
-				data: [8, 28, 53, 14, 0, 0, 0]
-			}, {
-				label: 'вышли на стажировку',
-				backgroundColor: window.chartColors.orange,
-				data: [12, 9, 11, 4, 7, 9, 7]
-			}, {
-				label: 'осталось работать',
-				backgroundColor: window.chartColors.red,
-				data: [7, 9, 6, 1, 6, 4, 5]
-			}]
-		};
-
-		var notEkb = [{
+		var labels = ['2018', '2017', '2016', '2015', '2014', '2013', '2012'].reverse()
+		var dataEkb = [{
             label: 'отклики',
             backgroundColor: window.chartColors.grey,
-            data: [0, 87, 89, 31, 0, 0, 0]
+            data: [48, 282, 325, 44, 162, 49, 125].reverse()
         }, {
             label: 'тестовые задания',
             backgroundColor: window.chartColors.blue,
-            data: [0, 32, 20, 19, 0, 0, 0]
+            data: [7, 55, 117, 15, 0, 0, 22].reverse()
         }, {
             label: 'собеседований',
             backgroundColor: window.chartColors.green,
-            data: [0, 11, 16, 9, 0, 0, 0]
+            data: [8, 28, 53, 14, 0, 0, 0].reverse()
         }, {
             label: 'вышли на стажировку',
             backgroundColor: window.chartColors.orange,
-            data: [1, 3, 4, 5, 0, 0, 0]
+            data: [12, 9, 11, 4, 7, 9, 7].reverse()
         }, {
             label: 'осталось работать',
             backgroundColor: window.chartColors.red,
-            data: [1, 3, 4, 3, 0, 0, 0]
+            data: [7, 9, 6, 1, 6, 4, 5].reverse()
+        }];
+
+		var dataNotEkb = [{
+            label: 'отклики',
+            backgroundColor: window.chartColors.grey,
+            data: [0, 87, 89, 31, 0, 0, 0].reverse()
+        }, {
+            label: 'тестовые задания',
+            backgroundColor: window.chartColors.blue,
+            data: [0, 32, 20, 19, 0, 0, 0].reverse()
+        }, {
+            label: 'собеседований',
+            backgroundColor: window.chartColors.green,
+            data: [0, 11, 16, 9, 0, 0, 0].reverse()
+        }, {
+            label: 'вышли на стажировку',
+            backgroundColor: window.chartColors.orange,
+            data: [1, 3, 4, 5, 0, 0, 0].reverse()
+        }, {
+            label: 'осталось работать',
+            backgroundColor: window.chartColors.red,
+            data: [1, 3, 4, 3, 0, 0, 0].reverse()
         }]
+
+		var datasetEkb = {
+            labels: labels,
+            datasets: dataEkb
+		}
+
+		var datasetAll = {
+            labels: labels,
+            datasets: dataEkb.map(obj => {
+					return {
+					    label: obj.label,
+                        backgroundColor: obj.backgroundColor,
+                        data: obj.data,
+                        stack: "_ekb",
+                        backgroundColor: Chart.helpers.color(obj.backgroundColor).alpha(0.5).rgbString()}
+                }).concat(dataNotEkb.map(obj => {
+                    obj.stack = "_oth";
+                    return obj
+                }))
+        }
 
 	</script>
 	</body>
