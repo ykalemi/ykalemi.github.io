@@ -11,15 +11,10 @@
  */
 var RevealNotes = (function() {
 
-	function openNotes( notesFilePath ) {
-
-		if( !notesFilePath ) {
-			var jsFileLocation = document.querySelector('script[src$="notes.js"]').src;  // this js file path
-			jsFileLocation = jsFileLocation.replace(/notes\.js(\?.*)?$/, '');   // the js folder path
-			notesFilePath = jsFileLocation + 'notes.html';
-		}
-
-		var notesPopup = window.open( notesFilePath, 'reveal.js - Notes', 'width=1100,height=700' );
+	function openNotes() {
+		var jsFileLocation = document.querySelector('script[src$="notes.js"]').src;  // this js file path
+		jsFileLocation = jsFileLocation.replace(/notes\.js(\?.*)?$/, '');   // the js folder path
+		var notesPopup = window.open( jsFileLocation + 'notes.html', 'reveal.js - Notes', 'width=1100,height=700' );
 
 		/**
 		 * Connect to the notes window through a postmessage handshake.
@@ -33,7 +28,7 @@ var RevealNotes = (function() {
 				notesPopup.postMessage( JSON.stringify( {
 					namespace: 'reveal-notes',
 					type: 'connect',
-					url: window.location.protocol + '//' + window.location.host + window.location.pathname + window.location.search,
+					url: window.location.protocol + '//' + window.location.host + window.location.pathname,
 					state: Reveal.getState()
 				} ), '*' );
 			}, 500 );
@@ -60,14 +55,12 @@ var RevealNotes = (function() {
 				type: 'state',
 				notes: '',
 				markdown: false,
-				whitespace: 'normal',
 				state: Reveal.getState()
 			};
 
 			// Look for notes defined in a slide attribute
 			if( slideElement.hasAttribute( 'data-notes' ) ) {
 				messageData.notes = slideElement.getAttribute( 'data-notes' );
-				messageData.whitespace = 'pre-wrap';
 			}
 
 			// Look for notes defined in an aside element
@@ -101,7 +94,6 @@ var RevealNotes = (function() {
 		}
 
 		connect();
-
 	}
 
 	if( !/receiver/i.test( window.location.search ) ) {
@@ -117,17 +109,11 @@ var RevealNotes = (function() {
 			// modifier is present
 			if ( document.querySelector( ':focus' ) !== null || event.shiftKey || event.altKey || event.ctrlKey || event.metaKey ) return;
 
-			// Disregard the event if keyboard is disabled
-			if ( Reveal.getConfig().keyboard === false ) return;
-
 			if( event.keyCode === 83 ) {
 				event.preventDefault();
 				openNotes();
 			}
 		}, false );
-
-		// Show our keyboard shortcut in the reveal.js help overlay
-		if( window.Reveal ) Reveal.registerKeyboardShortcut( 'S', 'Speaker notes view' );
 
 	}
 

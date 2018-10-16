@@ -2,15 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 		<title>Inversion of Control</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/white.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
 
 		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/vs.css">
+		<link rel="stylesheet" href="css/hljs/vs.css" id="highlight-theme">
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -20,17 +20,51 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+		<link rel="stylesheet" href="css/custom.css">
+		<style>
+		    .reveal pre {
+		        background: none;
+		        border: none;
+		        box-shadow: none;
+		        width: auto;
+		    }
+		    
+		    .reveal pre code {
+		        color: black;
+		        background: none;
+		        box-shadow: none;
+		        max-height: none;
+		        line-height: 1.5;
+		        overflow: hidden;
+		        font-size: 82%;
+		    }
+		    
+		    .stroke {
+		        text-decoration: line-through;
+		    }
+		    
+		    .red-text {
+		        color: red;
+		    }
+		</style>
 	</head>
 	<body>
 		<div class="reveal slide">
 			<div class="footer">
-							NAUMEN, Калеми Юрий
+							<span class="corp-name"><b>NAUMEN </b></span>Калеми Юрий
 			</div>
 			<div class="slides">
 				<section>
 					<h2>Inversion of Control</h2>
 					<h2>Инверсия управления</h2>
 					<p>На примере Spring</p>
+		            <p>
+		                <small>
+		                    Калеми Юрий / <a href="mailto:ykalemi@naumen.ru">ykalemi@naumen.ru</a>
+		                    <br/>
+		                    <br/>
+		                </small>
+		            </p>
 				</section>
 				<section>
 					<h2>Интерфейсы vs. классы</h2>
@@ -52,7 +86,7 @@
 					</ul>
 				</section>
 				<section>
-					<img data-src="img/comic.jpg">
+					<img data-src="img/ioc/comic.jpg">
 				</section>
 				<section>
 					<ul>
@@ -88,12 +122,23 @@
 					</ul>
 				</section>
 				<section>
+					<h2>Фреймворк/библиотека</h2>
+					<p>Что означают эти термины?</p>
+					<p>Чем они отличаются?</p>
+				</section>
+				<section>
+					<h2>Библиотека</h2>
+				</section>
+				<section>
 					<h2>Библиотека</h2>
 					<ul>
 						<li >Набор функций, которые можно вызвать</li>
 						<li >Библиотека делает работу и возвращает результат</li>
 						<li >Примеры: прочитать файл; сделать запись в лог</li>
 					</ul>
+				</section>
+				<section>
+					<h2>Фреймворк</h2>
 				</section>
 				<section>
 					<h2>Фреймворк</h2>
@@ -111,15 +156,6 @@
 						<li >Код фреймворка вызывает ваш код в конкретных точках</li>
 					</ul>
 				</section>
-				<section>
-					<h2>Inversion of Control (Инверсия управления)</h2>
-					<ul>
-						<li >Ключевая характеристика фреймворка</li>
-						<li >Контроль остаётся в коде фреймворка</li>
-						<li >Пользователь теряет контроль</li>
-					</ul>
-				</section>
-
 				<section><h3>Пример 1: командная строка</h3>
 					<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
 public static void main(String args[]) {
@@ -146,7 +182,7 @@ public ModelAndView index() {
 					<ul>
 						<li >Мы просто возвращаем ответ</li>
 						<li >Что происходило до вызова метода?</li>
-						<li >Теряем управление</li>
+						<li ><b>Теряем управление</b></li>
 					</ul>
 				</section>
 
@@ -156,7 +192,6 @@ public ModelAndView index() {
 						<li>Ключевая характеристика фреймворка</li>
 						<li>Контроль остаётся в коде фреймворка</li>
 						<li>Пользователь теряет контроль</li>
-						<li >Это и есть Инверсия управления</li>
 					</ul>
 				</section>
 				<section>
@@ -190,21 +225,47 @@ public abstract class TestCase extends Assert implements Test {
 					<ul>
 						<li >Шаблон “Фабрика” (Factory)</li>
 						<li >Service locator (JNDI)</li>
+						<li >Внедрение зависимостей</li>
 					</ul>
 				</section>
 				<section>
 					<h2>Service locator</h2>
 <pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
-MovieFinder finder = (MovieFinder) 
-		ServiceLocator.getService("MovieFinder");
+public Collection&lt;Movie&gt; find() { 
+    MovieFinder finder = (MovieFinder) 
+        ServiceLocator.getService("MovieFinder");
+    ...
+}
 </code></pre>
+				</section>
+				<section>
+					<h2>Service locator</h2>
+					<p>Считается антипаттерном - скрывает зависимости</p>
+				</section>
+				<section>
+					<h2>Service locator</h2>
+					<img data-src="img/ioc/activator.png" width="100%" style="border:0"/>
+				</section>
+				<section>
+					<h2>Service locator</h2>
+					<img data-src="img/ioc/hundred.png" width="100%" style="border:0"/>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
 					<h5>Внедрение зависимостей</h5>
 					<p>Пример от Мартина Фаулера</p>
 				<a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a>
-			</section>
+				</section>
+				<section>
+					<ul>
+						<li>Определим интерфейс</li>
+					</ul>
+<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
+public interface MovieFinder {
+  List&lt;Movie&gt; findAll();
+}
+</code></pre>
+				</section>
 				<section>
 <pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
 public class MovieLister {...
@@ -223,16 +284,6 @@ public class MovieLister {...
 </code></pre>
 				</section>
 				<section>
-					<ul>
-						<li>Определим интерфейс</li>
-					</ul>
-<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
-public interface MovieFinder {
-  List&lt;Movie&gt; findAll();
-}
-</code></pre>
-				</section>
-				<section>
 					<p>Откуда мы возьмём конкретную реализацию?</p>
 <pre   style="box-shadow:none"><code data-trim data-noescape class="language-java">
 public class MovieLister {
@@ -246,7 +297,7 @@ public class MovieLister {
 				</section>
 				<section>
 					<p>Схема зависимостей</p>
-					<img data-src="img/dep1.svg" width="100%"  style="border:0"/>
+					<img data-src="img/ioc/dep1.svg" width="100%"  style="border:0"/>
 				</section>
 				<section>
 					<p>В чём проблема?</p>
@@ -263,7 +314,7 @@ public class MovieLister {
 						<li>Assembler, управляющий зависимостями</li>
 						<li>Предоставляет конкретную реализацию для интерфейса</li>
 					</ul>
-					<img data-src="img/dep2.svg" width="100%" style="border:0"/>
+					<img data-src="img/ioc/dep2.svg" width="100%" style="border:0"/>
 				</section>
 				<section>
 					<h2>Dependency Injection</h2>
@@ -333,7 +384,7 @@ public class MovieLister {
 				<section>
 					<h2>Spring</h2>
 					<h5>Все проекты</h5>
-					<img data-src="img/spring_io.png"/>
+					<img data-src="img/ioc/spring_io.png"/>
 				</section>
 				<section>
 					<h2>Spring framework</h2>
@@ -659,7 +710,7 @@ public @interface RestController {
 				</section>
 				<section>
 					<h2>Dispatcher Servlet</h2>
-					<img data-src="img/dispatcherservlet.png">
+					<img data-src="img/ioc/dispatcherservlet.png">
 				</section>
 				<section>
 					<h2>Контроллер</h2>
@@ -716,23 +767,68 @@ public class HelloController {
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.js"></script>
 
-		<script>
-			// More info https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				history: true,
-				// Shows the slide number using default formatting
-				slideNumber: true,
-				controls: false,
-				center: true,
-				transition: 'slide',
-				// More info https://github.com/hakimel/reveal.js#dependencies
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+            slideNumber: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+            // Optional reveal.js plugins
+            dependencies: [{
+                src: 'lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: 'plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: 'plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: 'plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: 'plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: 'plugin/notes/notes.js',
+                async: true
+            }]
+        });
+        window.addEventListener("mousedown", handleClick, false);
+        window.addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+        }, false);
+        function handleClick(e) {
+            e.preventDefault();
+            if (e.button === 0) Reveal.next();
+            if (e.button === 2) Reveal.prev();
+        }
+        Reveal.addEventListener('fragmentshown', function(event) {
+            if (event.fragment.id == 'aVotInet') {
+                document.getElementById('checkNoBugs').classList.add("stroke");
+            }
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            if (event.fragment.id == 'aVotInet') {
+                document.getElementById('checkNoBugs').classList.remove("stroke");
+            }
+        });
+    </script>
 	</body>
 </html>
