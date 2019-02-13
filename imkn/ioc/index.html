@@ -650,6 +650,60 @@ public class MovieFinderConfiguration {
 </code></pre>
 				</section>
 				<section>
+					<h2>Область видимости</h2>
+					<h5>Вопрос: что происходит если внедрить Prototype-бин в Singleton-бин?</h5>
+<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
+@Component
+public class SingletonBean {
+
+    @Autowired
+    private PrototypeBean prototypeBean;
+
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Внедрение Prototype бинов</h2>
+					<h2>@Lookup</h2>
+<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
+@Component
+public class SingletonLookupBean {
+ 
+    @Lookup
+    public PrototypeBean getPrototypeBean() {
+        return null;
+    }
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Внедрение Prototype бинов</h2>
+					<h2>ObjectFactory</h2>
+<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
+@Component
+public class SingletonObjectFactoryBean {
+ 
+    @Autowired
+    private ObjectFactory&ltPrototypeBean&gt prototypeBeanObjectFactory;
+ 
+    public PrototypeBean getPrototypeInstance() {
+        return prototypeBeanObjectFactory.getObject();
+    }
+}
+</code></pre>
+				</section>
+				<section>
+					<h2>Внедрение Prototype бинов</h2>
+					<h2>Proxy</h2>
+<pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
+@Scope(
+  value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, 
+  proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Component
+public class PrototypeBean {...
+</code></pre>
+				</section>
+				<section>
 					<h2>Внедрение системных свойств</h2>
 <pre style="box-shadow:none"><code data-trim data-noescape class="language-java">
 @Component
