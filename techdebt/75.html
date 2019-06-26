@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<title>Тех долг 7.4 (PMS)</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="css/hljs/vs.css" id="highlight-theme">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<link rel="stylesheet" href="css/custom.css">
+		<style>
+		    .reveal pre {
+		        background: none;
+		        border: none;
+		        box-shadow: none;
+		        width: auto;
+		    }
+		    
+		    .reveal pre code {
+		        color: black;
+		        background: none;
+		        box-shadow: none;
+		        max-height: none;
+		        line-height: 1.5;
+		        overflow: hidden;
+		        font-size: 82%;
+		    }
+		    
+		    .stroke {
+		        text-decoration: line-through;
+		    }
+		    
+		    .red-text {
+		        color: red;
+		    }
+		</style>
+	</head>
+	<body>
+		<div class="reveal slide">
+			<div class="footer">
+							<span class="corp-name"><b>NAUMEN </b></span>Калеми Юрий
+			</div>
+			<div class="slides">
+				<section>
+					<h2>Техдлог 7.4</h2>
+				</section>
+				<section>
+					<h4>#76869 RnD: Взаимодействие PMS и Dialer</h4>
+					<p>Проблема:</p>
+					<ul>
+						<li >рассинхронизация данных</li>
+						<li >необходимость обновлять список номеров</li>
+						<li >а иногда не надо обновлять список</li>
+						<li >сложность понимания статусов выгрузки</li>
+					</ul>
+					<p>Результат: Есть согласованное решение (с неясной перспективой)</p>
+				</section>
+				<section>
+					<h4>#74897 RND: Неголосовые обращения: Рефакторинг кода и хранения данных</h4>
+					<p>Проблема:</p>
+					<ul>
+						<li >много возвратов после тестирования</li>
+						<li >код очень запутанный, нет чёткой идеи как его упростить</li>
+					</ul>
+					<p>Результат: Есть план действий</p>
+				</section>
+				<section>
+					<h4>#62617 Переход на OpenJDK 11</h4>
+					<p>Актуализация технологий</p>
+					<ul>
+						<li >безопасность</li>
+						<li >удобство</li>
+						<li >мода</li>
+						<li >=&gt;мотивация</li>
+					</ul>
+				</section>
+				<section>
+					<h4>#59473 RnD: СоцСети - интеграционное тестирование</h4>
+					<p>Проблема:</p>
+					<ul>
+						<li >нет автотестов на анкеты с дискретными каналами</li>
+						<li >не можем открыть анкету с чатом</li>
+						<li >не понятно, как взаимодействовать</li>
+					</ul>
+					<p>Результат: Есть новые тесты на чаты на анкете</p>
+				</section>
+				<section>
+					<h4>#64197 Обновить Selenium Web driver</h4>
+					<p>Проблемы:</p>
+					<ul>
+						<li >сейчас вынуждены использовать старую версию FF</li>
+						<li >автотесты будут немного быстрее</li>
+					</ul>
+				</section>
+				<section>
+					<h4>#70380 Защита от большого количества HTTP-сессий в Rest</h4>
+					<p>Проблемы:</p>
+					<ul>
+						<li >на каждый запрос создаётся сессия</li>
+						<li >у клиента было 1 млн сессий. Память закончилась</li>
+					</ul>
+				</section>
+				<section>
+					<h4>#59800 RnD: версионирование Rest</h4>
+					<p>Результат: Реализовано!</p>
+				</section>
+				<section>
+					<h4>#65954 RnD: Отказаться от OpenSessionInView</h4>
+					<p>Проблема: на каждый Http-запрос открывается транзакция</p>
+					<p>Результат: Есть план действий</p>
+				</section>
+				<section>
+					<h4>#76875 Инструкция по настройке и запуске Webphone</h4>
+				</section>
+				<section>
+					<h4>#74919 Выделить табы в тестах в отдельные Page</h4>
+				</section>
+				<section>
+					<h4>#85289 Изменения для улучшения поддержки кода чатов [7.5]</h4>
+				</section>
+				<section>
+					<h4>Процесс формирования техдлога</h4>
+				</section>
+				<section>
+					<h4>Что такое Техдлог</h4>
+					<p>То, что мешает доставлять ценность до клиента (быстрее)</p>
+					<ul>
+						<li>гниющий код</li>
+						<li>устаревшая архитектура/не спроектированная для данного использования</li>
+						<li>трудности в анализе поведения системы (например, логи)</li>
+						<li>устаревающие технологии</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Из предыдущей презентации</h4>
+					<p>К 7.5 нужно сформулировать способ приоритезации задач техдолга</p>
+				</section>
+				<section>
+					<h4>Метрика Техдлога</h4>
+					<p>(Будущее) потерянное время</p>
+					<ul>
+						<li>на дефекты (анализ, поиск, исправление, обновление)</li>
+						<li>на клиента</li>
+						<li>на понимание сложного кода</li>
+						<li>на ожидание нестабильных тестов</li>
+						<li>депрессии/увольнения сотрудников</li>
+					</ul>
+				</section>
+				<section>
+					<h4>Метрика Техдлога</h4>
+					<p>Каждая задача Техдолга должна оцениваться с точки зрения Метрики. Каким образом реализация поможет избежать будущих потерь</p>
+				</section>
+				<section>
+					<h4>Техдлог 7.5</h4>
+					<ul>
+						<li>Техдолг 7.5 (PMS) - фильтр Redmine</li>
+						<li>#techdebt75</li>
+					</ul>
+				</section>
+				<section>
+					<h4>Техдлог 7.5</h4>
+					<ul>
+						<li>Устаревший дизайн/гниющий код (результаты RND)</li>
+						<li>Автотестирование (стабильность, миграционные)</li>
+					</ul>
+				</section>
+				<section>
+					<h4>#86372 Неголосовые обращения: Рефакторинг кода и хранения данных</h4>
+					<p>Задачи:</p>
+					<ul>
+						<li>Изменение схемы БД (большие таблицы)</li>
+						<li>Упрощение кодовой базы</li>
+					</ul>
+				</section>
+				<section>
+					<h4>#85979 RnD Интеграция PMS и Dialer через персистентную очередь</h4>
+					<p>Снова только RnD</p>
+					<p>Самый главный вопрос: обработка ошибок</p>
+				</section>
+				<section>
+					<h4>#85289 Изменения для улучшения поддержки кода чатов</h4>
+					<p>Удаление неиспользуемого кода</p>
+				</section>
+				<section>
+					<h4>#82324 Отказаться от OpenSessionInView</h4>
+					<p>Проблема: занятые соединения БД при каждом HTTP-запросе</p>
+					<p>Есть план действий (долгий)</p>
+				</section>
+				<section>
+					<h4>#85707 Не заполняется база MV при старте на разных базах</h4>
+					<p>Проблемы:</p>
+					<ul>
+						<li>Поддержка двух БД в production</li>
+						<li>Чтобы оставить только PG, нужно уметь решать subject</li>
+					</ul>
+				</section>
+				<section>
+					<h4>#83169 Нестабильные интерфейсные тесты</h4>
+					<p>Близки к решению</p>
+				</section>
+				<section>
+					<h4>#76609 Новые автотесты на PMS</h4>
+					<p>Автоматизируем существующие тест-кейсы</p>
+				</section>
+				<section>
+					<h4>#74226 Обновление Selenium: Нестабильные тесты ValidatorsSpec</h4>
+					<p>Классический "Осознанный техдолг"</p>
+				</section>
+				<section>
+					<h4>#72533 Реализовать запуск jasmine-тестов в gradle-сборке</h4>
+					<p>Ещё один "Осознанный техдолг"</p>
+				</section>
+				<section>
+					<h4>#86371 Smoke-тесты на чаты</h4>
+					<p>Новый продукт - новые тесты</p>
+				</section>
+				<section>
+					<h4>#83622 Обновить тестовую базу для миграционных тестов</h4>
+					<p>Проблемы:</p>
+					<ul>
+						<li>База старая (6.2?), новая функциональность не мигрируется</li>
+						<li>Есть дефекты на (тестовых) миграциях у клиентов</li>
+					</ul>
+				</section>
+				<section>
+					<h4>#76141 Автотесты на Webphone</h4>
+					<p>Можем долгое время вообще его не открывать до релиза</p>
+				</section>
+				<section>
+					<h4>#29517 Почистить логи от левых трейсов</h4>
+					<p>Небольшая задача о приборке в логах</p>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+    <script>
+        // Full list of configuration options available at:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            history: true,
+            center: true,
+            slideNumber: true,
+            transition: 'slide', // none/fade/slide/convex/concave/zoom
+            // Optional reveal.js plugins
+            dependencies: [{
+                src: 'lib/js/classList.js',
+                condition: function() {
+                    return !document.body.classList;
+                }
+            }, {
+                src: 'plugin/markdown/marked.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: 'plugin/markdown/markdown.js',
+                condition: function() {
+                    return !!document.querySelector('[data-markdown]');
+                }
+            }, {
+                src: 'plugin/highlight/highlight.js',
+                async: true,
+                condition: function() {
+                    return !!document.querySelector('pre code');
+                },
+                callback: function() {
+                    hljs.initHighlightingOnLoad();
+                }
+            }, {
+                src: 'plugin/zoom-js/zoom.js',
+                async: true
+            }, {
+                src: 'plugin/notes/notes.js',
+                async: true
+            }]
+        });
+        window.addEventListener("mousedown", handleClick, false);
+        window.addEventListener("contextmenu", function(e) {
+            e.preventDefault();
+        }, false);
+        function handleClick(e) {
+            e.preventDefault();
+            if (e.button === 0) Reveal.next();
+            if (e.button === 2) Reveal.prev();
+        }
+        Reveal.addEventListener('fragmentshown', function(event) {
+            if (event.fragment.id == 'aVotInet') {
+                document.getElementById('checkNoBugs').classList.add("stroke");
+            }
+        });
+        Reveal.addEventListener('fragmenthidden', function(event) {
+            if (event.fragment.id == 'aVotInet') {
+                document.getElementById('checkNoBugs').classList.remove("stroke");
+            }
+        });
+    </script>
+	</body>
+</html>
